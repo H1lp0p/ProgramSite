@@ -1,9 +1,10 @@
 let isMouseDown = false;
-//TODO: history of coloring
-function DCanvas(canvas){
+
+//TODO: drawing func (for UDOUNO & H1p0 variants)
+function DCanvas(canvas, dims){
 
     context = canvas.getContext("2d");
-    const dimension = 10;
+    const dimension = dims;
     const pixelLen = canvas.height / dimension;
     let gridColor = "#7F49C4FF";
     let emptyPixel = "#2A2D43FF";
@@ -42,13 +43,13 @@ function DCanvas(canvas){
         }
     }
 
-    this.drawPixel = function (x, y){
+    this.drawPixel = function (x, y, pat = usingPattern){
         x = Math.floor(x / pixelLen);
         y = Math.floor(y / pixelLen);
-        if(usingPattern != emptyPixel){
+        if(pat !== emptyPixel){
             context.beginPath();
-            context.fillStyle = usingPattern;
-            context.strokeStyle = usingPattern;
+            context.fillStyle = pat;
+            context.strokeStyle = pat;
             context.lineJoin = "bevel";
             context.lineWidth = 1;
             context.closePath();
@@ -81,16 +82,3 @@ function DCanvas(canvas){
 
 }
 
-function mousDown(e){
-    //alert('Fuck');
-    isMouseDown = true;
-    const cnvBoundingRect = canvas.getBoundingClientRect();
-    const x = e.clientX - cnvBoundingRect.left;
-    const y = e.clientY - cnvBoundingRect.top;
-    d.drawPixel(x ,y);
-}
-
-let canvas = document.getElementById("canvas");
-const d = new DCanvas(canvas);
-
-canvas.addEventListener("mousedown",mousDown);
