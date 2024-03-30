@@ -34,12 +34,12 @@ function DCanvas(canvas, dims){
 
     }
 
-    this.drawGrid = function (){
+    this.drawGrid = function (color = gridColor){
         for (let x = 0; x<dimension; x+=1){
-            this.drawLine(x*pixelLen, 0, x*pixelLen, canvas.height);
+            this.drawLine(x*pixelLen, 0, x*pixelLen, canvas.height, color);
         }
         for(let y = 0; y<dimension; y += 1){
-            this.drawLine(0, y*pixelLen, canvas.width, y*pixelLen);
+            this.drawLine(0, y*pixelLen, canvas.width, y*pixelLen, color);
         }
     }
 
@@ -66,18 +66,6 @@ function DCanvas(canvas, dims){
 
     this.clear = function (){
         context.reset();
-    }
-
-    this.changeToWalls = function (){
-        usingPattern = pattern;
-    }
-
-    this.changeToEmpty = function (){
-        usingPattern = emptyPixel;
-    }
-
-    this.changeToPointer = function (){
-        usingPattern = snakePart;
     }
 
 }
