@@ -1,7 +1,7 @@
 let isMouseDown = false;
 
 //TODO: drawing func (for UDOUNO & H1p0 variants)
-function DCanvas(canvas, dims){
+function DCanvas(canvas, dims = 11){
 
     context = canvas.getContext("2d");
     const dimension = dims;
@@ -43,7 +43,7 @@ function DCanvas(canvas, dims){
         }
     }
 
-    this.drawPixel = function (x, y, pat = usingPattern){
+    this.drawPixel = function (x, y, pat = usingPattern, grid = true){
         x = Math.floor(x / pixelLen);
         y = Math.floor(y / pixelLen);
         if(pat !== emptyPixel){
@@ -55,11 +55,14 @@ function DCanvas(canvas, dims){
             context.closePath();
             context.fillRect(x * pixelLen, y * pixelLen, pixelLen, pixelLen);
         }
-        else{
+        else if (grid){
             context.clearRect(x * pixelLen, y * pixelLen, pixelLen, pixelLen);
             context.strokeStyle = pattern;
             context.rect(x * pixelLen, y * pixelLen, pixelLen, pixelLen);
             context.stroke();
+        }
+        else{
+            context.clearRect(x * pixelLen, y * pixelLen, pixelLen, pixelLen);
         }
 
     }

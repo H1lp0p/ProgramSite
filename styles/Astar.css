@@ -4,17 +4,21 @@ canvas{
     border: dashed var(--main-style-blue);
 }
 
-.tool-buttons{
+.tool-buttons-canvas{
     padding: 10px;
-    display: inline-block;
+    display: inline-grid;
     align-content: center;
     justify-content: center;
+}
+
+.tool-buttons{
+    padding: 10px;
 }
 
 .canvas-panel{
     align-content: center;
     justify-content: center;
-    display: grid;
+    display: flex;
 }
 
 .inBody-button{
@@ -40,4 +44,15 @@ canvas{
     font-family: "Workbench", sans-serif;
     font-size: 200%;
     color: var(--main-style-dark);
+}
+
+.log {
+    width: 15%;
+    margin: 0.5em;
+    padding: 8px;
+    outline-style: dashed;
+    outline-color: var(--main-style-blue);
+    font-family: "Workbench", sans-serif;
+    font-size: 200%;
+    color: var(--main-style-pink);
 }
