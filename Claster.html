@@ -5,8 +5,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Workbench:SCAN@-14&display=swap" rel="stylesheet">
     <link href="styles/style.css" rel="stylesheet" type="text/css"/>
+    <link href="styles/Neuro.css" rel="stylesheet" type="text/css"/>
     <meta charset="UTF-8">
-    <title>Main</title>
+    <title>Neuro</title>
 </head>
 <header>
     <a class="header-context" id="main" href="index.html">Main</a>
@@ -17,10 +18,16 @@
     <a class="header-context" id="generic" href="genetic.html">Genetic</a>
     <a class="header-context" id="neuro" href="Neuro.html">Neuro</a>
 </header>
+
 <body>
-<canvas id="canvas"></canvas>
+<canvas id="canv" style="display: block;"></canvas>
+<script src="scripts/K-means.js"></script>
+<button class = "inBody-button" onclick="c.clear()">clear</button>
+<button class = "inBody-button" onclick="c.claster(2)">2 types</button>
+<button class = "inBody-button" onclick="c.claster(3)">3 types</button>
+<button class = "inBody-button" onclick="c.claster(4)">4 types</button>
 </body>
 <footer>
-    <h1 class="footer-context"><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Vanya Baran</a></h1>
+    <h1 class="footer-context">Vanya Gay</h1>
 </footer>
 </html>
