@@ -3,6 +3,7 @@ function DCanvas(el) {
     ctx = el.getContext("2d");
     el.width = 1000;
     el.height = 1000;
+    let mutationPercent = 10;
 
     function getMousePos(el, evt) {
         var rect = el.getBoundingClientRect();
@@ -12,30 +13,84 @@ function DCanvas(el) {
     el.addEventListener("mousedown", function (evt) {
         is_mouse_down = true;
         ctx.beginPath();
-    })
-
-    el.addEventListener("mousedown", function (evt) {
         if (is_mouse_down) {
-            ctx.fillStyle = "violet";
-            ctx.rect(getMousePos(el, evt).x, getMousePos(el, evt).y, 10, 10);
-            cities.push([getMousePos(el, evt).x, getMousePos(el, evt).y]);
-            ctx.fill();
-            if (cities.length > 1) {
-                for (let i = 0; i < cities.length - 1; i++) {
-                    for (let j = i + 1; j < cities.length; j++) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = "violet";
-                        ctx.moveTo(cities[i][0], cities[i][1]);
-                        ctx.lineTo(cities[j][0], cities[j][1]);
-                        ctx.stroke();
-                    }
-                }
-            }
+            add(evt);
         }
     })
 
-    this.clear = function () {
-        ctx.clearRect(0, 0, el.width, el.height);
+    function add(evt) {
+        ctx.fillStyle = "violet";
+        ctx.lineWidth = 1;
+        ctx.rect(getMousePos(el, evt).x, getMousePos(el, evt).y, 10, 10);
+        cities.push([getMousePos(el, evt).x, getMousePos(el, evt).y]);
+        ctx.fill();
+        if (cities.length > 1) {
+            for (let i = 0; i < cities.length - 1; i++) {
+                for (let j = i + 1; j < cities.length; j++) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = "violet";
+                    ctx.moveTo(cities[i][0], cities[i][1]);
+                    ctx.lineTo(cities[j][0], cities[j][1]);
+                    ctx.stroke();
+                }
+            }
+        }
+    }
+
+    function clear() {
+        ctx.fillStyle = "rgb(83, 85, 116)";
+        ctx.fillRect(0, 0, el.width, el.height);
+    }
+
+    function create() {
+        clear();
+        ctx.lineWidth = 1;
+        for (let i = 0; i < cities.length; i++) {
+            ctx.fillStyle = "violet";
+            ctx.fillRect(cities[i][0], cities[i][1], 10, 10);
+        }
+        ctx.fillStyle = "white";
+        ctx.fillRect(cities[0][0], cities[0][1], 10, 10);
+        ctx.strokeStyle = "violet";
+        for (let i = 0; i < cities.length - 1; i++) {
+            for (let j = i + 1; j < cities.length; j++) {
+                ctx.beginPath();
+                ctx.moveTo(cities[i][0], cities[i][1]);
+                ctx.lineTo(cities[j][0], cities[j][1]);
+                ctx.stroke();
+                ctx.closePath();
+            }
+        }
+    }
+
+    function drawPath(best,i){
+        for (let j = 0; j < best[i].length - 2; j++) {
+            ctx.beginPath();
+            ctx.strokeStyle = "cyan";
+            ctx.moveTo(best[i][j][0], best[i][j][1]);
+            ctx.lineTo(best[i][j + 1][0], best[i][j + 1][1]);
+            ctx.stroke();
+            ctx.closePath();
+        }
+    }
+    function draw(best) {
+        let milsec =1000;
+        for (let i = 0; i < best.length; i++) {
+            setTimeout(() => {
+                create();},milsec);
+            // clear();
+            // create();
+            setTimeout(() => {
+                ctx.lineWidth = 5;},milsec);
+            setTimeout(() => {
+                drawPath(best,i);},milsec);
+            milsec+=1000;
+        }
+    }
+
+    this.clearAll = function () {
+        ctx.fillStyle = "rgb(83, 85, 116)";
+        ctx.fillRect(0, 0, el.width, el.height);
         cities = [];
     }
 
@@ -44,50 +99,151 @@ function DCanvas(el) {
     }
 
     function random(min, max) {
-        return Math.random() * (max - min) + min;
+        return Math.floor(Math.random() * (max - min) + min);
     }
 
-    function randomNormal(mu, sigma) {
-        return [random(mu[0] - sigma[0], mu[0] + sigma[0]).toFixed(2), random(mu[1] - sigma[1], mu[1] + sigma[1]).toFixed(2)];
+    function merge(x, y) {
+        let ind = random(1, cities.length - 2);
+        let child1 = Array();
+        let child2 = Array();
+
+        for (let i = 0; i < ind; i++) {
+            child1.push(x[i]);
+            child2.push(y[i]);
+        }
+        for (let i = ind; i < x.length - 1; i++) {
+            let flag1 = 0;
+            let flag2 = 0;
+            for (let j = 0; j < child1.length - 1; j++) {
+                if (x[i][0] === child1[j][0] && x[i][1] === child1[j][1]) {
+                    flag1 = 1;
+                }
+                if (y[i][0] === child2[j][0] && y[i][1] === child2[j][1]) {
+                    flag2 = 1;
+                }
+            }
+            if (flag1 === 0) {
+                child1.push(x[i]);
+            }
+            if (flag2 === 0) {
+                child2.push(y[i]);
+            }
+        }
+        let length1 = 0;
+        let length2 = 0;
+        for (let j = 0; j < child1.length - 1; j++) {
+            length1 += dist(child1[j][0], child1[j][1], child1[j + 1][0], child1[j + 1][1]);
+            length2 += dist(child2[j][0], child2[j][1], child2[j + 1][0], child2[j + 1][1]);
+        }
+        child1.push(child1[0]);
+        child2.push(child2[0]);
+        child1.push(length1);
+        child2.push(length2);
+        return [child1, child2];
+    }
+
+    function mutation(way) {
+        let ind1 = random(1, way.length - 2);
+        let ind2 = random(1, way.length - 2);
+        let temp = [];
+        temp = way[ind1];
+        way[ind1] = way[ind2];
+        way[ind2] = temp;
+        return way;
+    }
+
+    function shuffle(cities) {
+        let curInd = cities.length, randomInd;
+        while (curInd > 1) {
+            randomInd = random(1, cities.length);
+            curInd--;
+            [cities[curInd], cities[randomInd]] = [cities[randomInd], cities[curInd]];
+        }
+        return cities;
     }
 
     function genPopulation(cities, population) {
         for (let i = 0; i < population.length; i++) {
-            let temp = Array();
-            for (let i = 0; i < cities.length; i++) {
-                temp.push(cities[i]);
+            shuffle(cities);
+            for (let j = 0; j < cities.length; j++) {
+                population[i].push(cities[j]);
             }
-            population[i][0] = cities[0];
-            population[i][population.length - 1] = cities[0];
-            while (temp.length > 1) {
-                let index = random(1, temp.length);
-                population[i].push(temp[index]);
-                temp.slice(index, 1);
-            }
+            population[i].push(population[0][0]);
         }
         return population;
     }
 
-    function pathLen(pathLength, population) {
+    function pathLen(population) {
         for (let i = 0; i < population.length; i++) {
             let length = 0;
-            for (let j = 0; j < population.length - 1; j++) {
+            for (let j = 0; j < population[i].length - 2; j++) {
                 length += dist(population[i][j][0], population[i][j][1], population[i][j + 1][0], population[i][j + 1][1]);
             }
-            pathLength.push(length);
+            population[i].push(length);
         }
-        return pathLength;
+        return population;
+    }
+
+    function newPop(population) {
+        let selection = Array();
+        if (population.length % 2 !== 0) {
+            for (let i = 0; i < population.length - 2; i += 2) {
+                let children = [];
+                children.push(merge(population[i], population[i + 1]));
+                selection.push(children[0][0]);
+                selection.push(children[0][1]);
+            }
+            selection.push(population[population.length - 1]);
+        }
+        if (population.length % 2 === 0) {
+            for (let i = 0; i < population.length; i += 2) {
+                let children = [];
+                children.push(merge(population[i], population[i + 1]));
+                selection.push(children[0][0]);
+                selection.push(children[0][1]);
+            }
+        }
+        return selection;
     }
 
     this.path = function () {
-        let population = Array(cities.length ** 2);
+        let population = Array(cities.length * 2);
         for (let i = 0; i < population.length; i++) {
             population[i] = [];
         }
+        let bestPopulations = [];
+        let counter = 0;
+        let minLen = 99999999;
+        let newMinLen = 9999999;
         population = genPopulation(cities, population);
-        let pathLength = Array(population.length);
-        pathLength = pathLen(pathLength, population);
+        population = pathLen(population);
+        while (counter < 100) {
+            if (minLen > newMinLen) {
+                minLen = newMinLen;
+            }
+            population = newPop(population);
+            for (let i = 0; i < population.length; i++) {
+                let mutK = random(1, 100);
+                if (mutK >= mutationPercent) {
+                    population[i] = mutation(population[i]);
+                }
+            }
+            for (let i = 0; i < population.length; i++) {
+                newMinLen = Math.min(newMinLen, population[i][population[i].length - 1]);
+            }
+            console.log(minLen, newMinLen);
 
+            for (let i = 0; i < population.length; i++) {
+                if (newMinLen === population[i][population[i].length - 1]) {
+                    bestPopulations.push(population[i]);
+                    console.log("??");
+                }
+            }
+            draw(bestPopulations);
+            if (minLen === newMinLen) {
+                counter++;
+            }
+        }
     }
 }
 

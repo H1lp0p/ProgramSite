@@ -5,6 +5,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Workbench:SCAN@-14&display=swap" rel="stylesheet">
     <link href="styles/style.css" rel="stylesheet" type="text/css"/>
+    <link href="styles/Neuro.css" rel="stylesheet" type="text/css"/>
     <meta charset="UTF-8">
     <title>Neuro</title>
 </head>
@@ -19,19 +20,12 @@
 </header>
 
 <body>
-<div class="canvas-panel">
-    <div class="tool-buttons-canvas">
-        <canvas id="canv"></canvas>
-        <div class="tool-buttons">
-            <button class = "inBody-button" onclick="c.clear()">clear</button>
-            <button class = "inBody-button" onclick="c.path()">create path</button>
-        </div>
-    </div>
-</div>
-
+<canvas id="canv" style="display: block;"></canvas>
 <script src="scripts/Genetic.js"></script>
+<button class = "inBody-button" onclick="c.clearAll()">clear</button>
+<button class = "inBody-button" onclick="c.path()">create path</button>
 </body>
 <footer>
-    <h1 class="footer-context"><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Vanya Baran</a></h1>
+    <h1 class="footer-context">Vanya Gay</h1>
 </footer>
 </html>
