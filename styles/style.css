@@ -16,6 +16,26 @@
             "SCAN" -14;
 }
 
+@keyframes interactiveFlicker {
+    from{
+        text-shadow: 3px 0 0 var(--main-style-light-pink);
+    }
+    to{
+        text-shadow: 2px 1px 2px var(--main-style-light-pink);
+        filter: blur(1px);
+    }
+}
+
+@keyframes inverseInteractiveFlicker {
+    from{
+        text-shadow: 3px 0 0 var(--main-style-dark);
+    }
+    to{
+        text-shadow: 2px 1px 2px var(--main-style-dark-blue);
+        filter: blur(1px);
+    }
+}
+
 header {
     display: flex;
     margin-top: 0;
@@ -48,18 +68,24 @@ a {
     font-family: "Workbench", sans-serif;
     font-size: 200%;
     color: var(--main-style-pink);
+
+    animation-duration: 0.01s;
+    animation-name: interactiveFlicker;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
 }
 
 a:hover{
-    border-right: dashed;
-    border-left: dashed;
-    border-bottom: none;
-    border-top: none;
     background-color: var(--main-style-light-pink);
     outline-color: var(--main-style-pink);
     font-family: "Workbench", sans-serif;
     font-size: 200%;
     color: var(--main-style-dark);
+
+    animation-duration: 0.01s;
+    animation-name: inverseInteractiveFlicker;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
 }
 
 body{
@@ -89,8 +115,40 @@ footer {
     align-content: center;
 }
 
-.inBody-button{
+button{
     margin: 10px;
+    border-right: dashed;
+    border-left: dashed;
+    border-bottom: none;
+    border-top: none;
+    background-color: var(--main-style-black);
+    outline-color: var(--main-style-blue);
+    font-family: "Workbench", sans-serif;
+    font-size: 200%;
+    color: var(--main-style-pink);
+    animation-duration: 0.01s;
+    animation-name: interactiveFlicker;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+button:hover{
+    border-right: dashed;
+    border-left: dashed;
+    border-bottom: none;
+    border-top: none;
+    background-color: var(--main-style-light-pink);
+    outline-color: var(--main-style-pink);
+    font-family: "Workbench", sans-serif;
+    font-size: 200%;
+    color: var(--main-style-dark);
+    animation-duration: 0.01s;
+    animation-name: inverseInteractiveFlicker;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+.inBody-button{
     border-right: dashed;
     border-left: dashed;
     border-bottom: none;
@@ -112,4 +170,33 @@ footer {
     font-family: "Workbench", sans-serif;
     font-size: 200%;
     color: var(--main-style-dark);
+}
+
+canvas{
+    margin-top: 10px;
+    background-color: var(--main-style-black);
+    border: dashed var(--main-style-blue);
+
+    animation-duration: 0.01s;
+    animation-name: interactiveFlicker;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+.tool-buttons-canvas{
+    padding: 10px;
+    display: inline-grid;
+    align-content: center;
+    justify-content: center;
+}
+
+.tool-buttons{
+    padding-left: 0px;
+    align-content: center;
+}
+
+.canvas-panel{
+    align-content: center;
+    justify-content: center;
+    display: flex;
 }

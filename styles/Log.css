@@ -1,0 +1,15 @@
+.log {
+    width: 15%;
+    margin: 0.5em;
+    padding: 8px;
+    outline-style: dashed;
+    outline-color: var(--main-style-blue);
+    font-family: "Workbench", sans-serif;
+    font-size: 200%;
+    color: var(--main-style-pink);
+
+    animation-duration: 0.01s;
+    animation-name: interactiveFlicker;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}

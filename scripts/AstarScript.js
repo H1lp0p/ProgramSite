@@ -1,8 +1,8 @@
 const tiles = {emty : 0, wall : -1, end : 42};
-const delay = 100;
+const delay = 50;
 
 let emptyPixel = "#2A2D43FF";
-let snakePart = "#FF84E8FF"
+let snakePart = "#FF84E8FF";
 
 const  wallImg = new Image();
 wallImg.src = "../images/PixelPattern.png";
@@ -114,6 +114,7 @@ function showPlane(plane){
     console.log(plane);
     for (let y = 0; y<dimensions;y++){
         for(let x = 0; x<dimensions; x++){
+            pixel(y,x, emptyPixel);
             switch (plane[y][x]){
                 case tiles.wall:
                     pixel(y, x, wallPattern);
@@ -195,7 +196,7 @@ async function Astar(startY, startX, endY, endX){
                 queue.push(nowMove);
                 visited[nowMove[0]][nowMove[1]][3] = true;
                 pixel(nowMove[0], nowMove[1], workPattern);
-                await sleep(100);
+                await sleep(delay);
             }
             if (visited[nowMove[0]][nowMove[1]][2] > visited[nowPos[0]][nowPos[1]][2] + 1){
                 visited[nowMove[0]][nowMove[1]] = [nowPos[0], nowPos[1], visited[nowPos[0]][nowPos[1]][2] + 1, visited[nowMove[0]][nowMove[1]][3]];
@@ -242,7 +243,7 @@ async function ShowPath(startY, startX, endY, endX){
     let wave = 0;
     for (let nowPix of way){
         pixel(nowPix[0], nowPix[1], snakePart);
-        await  sleep(100);
+        await  sleep(delay);
         wave += 1;
     }
 }
@@ -266,7 +267,7 @@ function grid(){
 function clear(){
     endPoints = [];
     logPoints(endPoints);
-    plane = genPlane();
+    plane = genLab();
     showPlane(plane);
 }
 

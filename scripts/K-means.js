@@ -4,6 +4,9 @@ function DCanvas(el) {
     el.width = 1000;
     el.height = 1000;
 
+    let backgroundColor = "#2A2D43FF";
+    let pixelColor = "#FF84E8FF";
+
     function getMousePos(el, evt) {
         var rect = el.getBoundingClientRect();
         return {x: evt.clientX - rect.left, y: evt.clientY - rect.top};
@@ -16,7 +19,7 @@ function DCanvas(el) {
 
     el.addEventListener("mousedown", function (evt) {
         if (is_mouse_down) {
-            ctx.fillStyle = "violet";
+            ctx.fillStyle = pixelColor;
             ctx.rect(getMousePos(el, evt).x, getMousePos(el, evt).y, 10, 10);
             data.push([getMousePos(el, evt).x, getMousePos(el, evt).y]);
             ctx.fill();

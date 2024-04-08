@@ -71,5 +71,9 @@ function DCanvas(canvas, dims = 11){
         context.reset();
     }
 
+    this.getPixel = function (y,x){
+        return context.getImageData(y,x,1,1);
+    }
+
 }
 
