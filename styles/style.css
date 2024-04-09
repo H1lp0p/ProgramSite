@@ -36,6 +36,12 @@
     }
 }
 
+h2{
+    color: rgb(255, 132, 232);
+    font-size: 56px;
+    letter-spacing: 2px;
+}
+
 header {
     display: flex;
     margin-top: 0;
@@ -88,6 +94,31 @@ a:hover{
     animation-direction: alternate;
 }
 
+.showRanCol{
+    color: rgb(255, 132, 232);
+    font-size: 200%;
+}
+/* for chrome/safari */
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px;
+    height: 30px;
+    background:rgb(255, 132, 232);
+    cursor: pointer;
+    border: 5px rgb(255, 132, 232);
+    border-radius: 4px;
+}
+
+/* for firefox */
+.slider::-moz-range-thumb {
+    width: 10px;
+    height: 20px;
+    background: var(--main-style-dark);
+    cursor: pointer;
+    border: 5px var(--main-style-dark);
+    border-radius: 4px;
+}
 body{
     background-color: var(--main-style-black);
 }
@@ -170,6 +201,15 @@ button:hover{
     font-family: "Workbench", sans-serif;
     font-size: 200%;
     color: var(--main-style-dark);
+}
+.slider {
+    -webkit-appearance: none;
+    width: 200px;
+    height: 15px;
+    background: var(--main-style-dark);
+    outline: none;
+    border: 7px rgb(255, 132, 232);
+    border-radius: 8px;
 }
 
 canvas{

@@ -1,4 +1,11 @@
 function DCanvas(el) {
+    const numberOfCluster = document.getElementById("numberOfCluster");
+    const clusterNumDemo = document.getElementById("clusterNumDemo");
+    var numOfClust;
+    numberOfCluster.oninput = function () {
+        clusterNumDemo.innerHTML = this.value;
+        numOfClust = parseInt(numberOfCluster.value);
+    }
     let data = [];
     ctx = el.getContext("2d");
     el.width = 1000;
@@ -31,6 +38,11 @@ function DCanvas(el) {
         data = [];
     }
 
+    function clearDr() {
+        ctx.fillStyle = "rgb(83, 85, 116)";
+        ctx.fillRect(0, 0, el.width, el.height);
+    }
+
     function dist(x1, y1, x2, y2) {
         return Math.abs(Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)));
     }
@@ -43,10 +55,10 @@ function DCanvas(el) {
         return [random(mu[0] - sigma[0], mu[0] + sigma[0]).toFixed(2), random(mu[1] - sigma[1], mu[1] + sigma[1]).toFixed(2)];
     }
 
-    this.claster = function (amount) {
-        let centres = Array(amount);
-        for (let i = 0; i < amount; i++) {
-            centres[i] = Array(amount);
+    this.claster = function () {
+        let centres = Array(numOfClust);
+        for (let i = 0; i < numOfClust; i++) {
+            centres[i] = Array(numOfClust);
         }
         let res = [];
         let mean = Array(2);
@@ -67,23 +79,23 @@ function DCanvas(el) {
         }
         disp[0] = sumDispA / data.length;
         disp[1] = sumDispB / data.length;
-        for (let i = 0; i < amount; i++) {
+        for (let i = 0; i < numOfClust; i++) {
             centres[i][0] = randomNormal(mean, disp)[0];
             centres[i][1] = randomNormal(mean, disp)[1];
         }
         for (let z = 0; z < 100; z++) {
             let x = [];
-            for (let i = 0; i < amount; i++) {
+            for (let i = 0; i < numOfClust; i++) {
                 x[i] = new Array();
             }
             for (let i = 0; i < data.length; i++) {
                 let range = [];
                 let min = 9999;
                 let minInd = 0;
-                for (let j = 0; j < amount; j++) {
+                for (let j = 0; j < numOfClust; j++) {
                     range.push(dist(centres[j][0], centres[j][1], data[i][0], data[i][1]));
                 }
-                for (let j = 0; j < amount; j++) {
+                for (let j = 0; j < numOfClust; j++) {
                     if (min > range[j]) {
                         console.log(min);
                         min = range[j];
@@ -93,7 +105,7 @@ function DCanvas(el) {
                 }
                 x[minInd].push(data[i]);
             }
-            for (let i = 0; i < amount; i++) {
+            for (let i = 0; i < numOfClust; i++) {
                 let sumX = 0;
                 let sumY = 0;
                 for (let j = 0; j < x[i].length; j++) {
@@ -104,8 +116,8 @@ function DCanvas(el) {
                 centres[i][1] = sumY / x[i].length;
             }
             res = x;
-            for(let u =0;u<amount;u++){
-                if(res[u].length === 0){
+            for (let u = 0; u < numOfClust; u++) {
+                if (res[u].length === 0) {
                     centres[u][0] = randomNormal(mean, disp)[0];
                     centres[u][1] = randomNormal(mean, disp)[1];
                     z--;
@@ -113,6 +125,7 @@ function DCanvas(el) {
             }
 
         }
+        clearDr();
         for (let i = 0; i < res.length; i++) {
             for (let j = 0; j < res[i].length; j++) {
                 if (i === 0) {
@@ -131,10 +144,34 @@ function DCanvas(el) {
                     ctx.fillStyle = "yellow";
                     ctx.strokeStyle = "yellow";
                 }
+                if (i === 4) {
+                    ctx.fillStyle = "white";
+                    ctx.strokeStyle = "white";
+                }
+                if (i === 5) {
+                    ctx.fillStyle = "black";
+                    ctx.strokeStyle = "black";
+                }
+                if (i === 6) {
+                    ctx.fillStyle = "orange";
+                    ctx.strokeStyle = "orange";
+                }
+                if (i === 7) {
+                    ctx.fillStyle = "magenta";
+                    ctx.strokeStyle = "magenta";
+                }
+                if (i === 8) {
+                    ctx.fillStyle = "DarkSlateGray";
+                    ctx.strokeStyle = "DarkSlateGray";
+                }
+                if (i === 9) {
+                    ctx.fillStyle = "SaddleBrown";
+                    ctx.strokeStyle = "SaddleBrown";
+                }
                 ctx.fillRect(res[i][j][0], res[i][j][1], 10, 10);
                 ctx.beginPath();
-                ctx.moveTo(res[i][j][0],res[i][j][1]);
-                ctx.lineTo(centres[i][0],centres[i][1]);
+                ctx.moveTo(res[i][j][0], res[i][j][1]);
+                ctx.lineTo(centres[i][0], centres[i][1]);
                 ctx.stroke();
             }
         }

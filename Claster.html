@@ -5,6 +5,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Workbench:SCAN@-14&display=swap" rel="stylesheet">
     <link href="styles/style.css" rel="stylesheet" type="text/css"/>
+    <link href="styles/Neuro.css" rel="stylesheet" type="text/css"/>
     <meta charset="UTF-8">
     <title>Neuro</title>
 </head>
@@ -19,20 +20,17 @@
 </header>
 
 <body>
-<div class="canvas-panel">
-    <div class="tool-buttons-canvas">
-        <canvas id="canv"></canvas>
-        <div class="tool-buttons">
-            <button onclick="c.clear()">clear</button>
-            <button onclick="c.claster(2)">2 types</button>
-            <button onclick="c.claster(3)">3 types</button>
-            <button onclick="c.claster(4)">4 types</button>
-        </div>
-    </div>
+<canvas id="canv" style="display: block;"></canvas>
+<button class = "inBody-button" onclick="c.clear()">clear</button>
+<button class = "inBody-button" onclick="c.claster()">Clusterize</button>
+<div>
+    <label for="numberOfCluster"><h2>Choose number of clusters:</h2></label>
+    <input type="range" id="numberOfCluster" min="2" max="10" value="2" class ="slider" step="1">
+    <span id="clusterNumDemo" class ="showRanCol"></span>
 </div>
 <script src="scripts/K-means.js"></script>
 </body>
 <footer>
-    <h1 class="footer-context"><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Vanya Baran</a></h1>
+    <h1 class="footer-context">Vanya Gay</h1>
 </footer>
 </html>
