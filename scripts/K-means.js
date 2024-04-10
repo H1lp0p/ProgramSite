@@ -39,7 +39,7 @@ function DCanvas(el) {
     }
 
     function clearDr() {
-        ctx.fillStyle = "rgb(83, 85, 116)";
+        ctx.fillStyle = "rgb(42, 45, 67)";
         ctx.fillRect(0, 0, el.width, el.height);
     }
 

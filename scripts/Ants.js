@@ -1,113 +1,218 @@
-let wallColor = "#7F49C4FF";
-let emptyCell = "#2A2D43FF";
-
-let labSize = 11;
-
-let canvas = document.getElementById("canvas");
-let d = new DCanvas(canvas, labSize);
-let cellLen = canvas.height / labSize;
-let lab = genLab(labSize);
-
-function genLab(dimensions) {
-
-    const tiles = {emty : 0, wall : -1, end : 42};
-    function check(pos) {
-        return (pos[0] >= 0 && pos[0] < dimensions) && (pos[1] >= 0 && pos[1] < dimensions) && !visited[pos[0]][pos[1]];
+function DCanvas(el){
+    ctx = el.getContext("2d");
+    el.width = 1000;
+    el.height = 1000;
+    let pheromone = [];
+    let cities = [];
+    const numAnts = 10;
+    const numIterations = 100;
+    const evaporationRate = 0.1;
+    const alpha = 1;
+    const beta = 2;
+    ctx.fillStyle = "rgb(42, 45, 67)";
+    ctx.strokeStyle = 'rgb(255, 132, 232)';
+    function getMousePos(el, evt) {
+        var rect = el.getBoundingClientRect();
+        return {x: evt.clientX - rect.left, y: evt.clientY - rect.top};
     }
 
-    let hallDimension = Math.floor(dimensions / 2) + 1;
-    let newPlane = [];
-
-    for (let y = 0; y<dimensions; y++){
-        let line = [];
-
-        for (let x = 0; x<dimensions; x++){
-            line.push(tiles.emty);
+    el.addEventListener("mousedown", function (evt) {
+        is_mouse_down = true;
+        ctx.beginPath();
+        if (is_mouse_down) {
+            add(evt);
         }
-        newPlane.push(line);
-    }
+    })
 
-
-    let startPos = [0, 0];
-    let queue = [];
-    let visited = [];
-
-    for (let y = 1; y < dimensions; y += 2) {
-        for (let x = 1; x < dimensions; x += 2) {
-            newPlane[y - 1][x] = tiles.wall;
-            newPlane[y + 1][x] = tiles.wall;
-            newPlane[y][x - 1] = tiles.wall;
-            newPlane[y][x + 1] = tiles.wall;
-            newPlane[y][x] = tiles.wall;
-        }
-    }
-
-
-    for (let y = 0; y < dimensions; y++) {
-        let line = [];
-        for (let x = 0; x < dimensions; x++) {
-            line.push(false);
-        }
-        visited.push(line);
-    }
-
-    queue.push(startPos);
-    visited[startPos[0]][startPos[1]] = true;
-
-    let avalibleMove = [[2, 0], [-2, 0], [0, 2], [0, -2]];
-
-    do {
-        let nowPos = queue[queue.length - 1];
-        let posibleMoves = avalibleMove.map(x => [x[0] + nowPos[0], x[1] + nowPos[1]]);
-        posibleMoves = posibleMoves.filter(check);
-
-        //console.log(nowPos, posibleMoves);
-
-        if (posibleMoves.length > 0) {
-            let randInd = Math.floor(Math.random() * posibleMoves.length);
-
-            let nextMove = posibleMoves[randInd];
-
-            for (let y = 0; y <= Math.abs(nowPos[0] - nextMove[0]); y++) {
-                newPlane[nowPos[0] + y * (nextMove[0] - nowPos[0]) / 2][nowPos[1]] = tiles.emty;
-                visited[nowPos[0] + y * (nextMove[0] - nowPos[0]) / 2][nowPos[1]] = true;
-            }
-            for (let x = 0; x <= Math.abs(nowPos[1] - nextMove[1]); x++) {
-                newPlane[nowPos[0]][nowPos[1] + x * (nextMove[1] - nowPos[1]) / 2] = tiles.emty;
-                visited[nowPos[0]][nowPos[1] + x * (nextMove[1] - nowPos[1]) / 2] = true;
-            }
-            //queue.push([nowPos[0] + (nextMove[0] - nowPos[0])/2, nowPos[1] + (nextMove[1] - nowPos[1])/2]);
-            queue.push(nextMove);
-        } else {
-            queue.pop();
-        }
-
-    } while (queue.length > 0);
-
-    return newPlane;
-}
-
-function renderLab(lab){
-    d.clear();
-    for (let y = 0; y<labSize; y++){
-        for (let x = 0; x<labSize; x++){
-            switch (lab[y][x]){
-                case (-1) :
-                    d.drawPixel(y* cellLen, x* cellLen, wallColor);
-                    break;
-                default:
-                    d.drawPixel(y* cellLen, x* cellLen, emptyCell, false);
-                    break;
+    function add(evt) {
+        ctx.fillStyle = "violet";
+        ctx.lineWidth = 1;
+        ctx.rect(getMousePos(el, evt).x, getMousePos(el, evt).y, 10, 10);
+        cities.push({x:getMousePos(el, evt).x, y:getMousePos(el, evt).y});
+        ctx.fill();
+        if (cities.length > 1) {
+            for (let i = 0; i < cities.length - 1; i++) {
+                for (let j = i + 1; j < cities.length; j++) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = "violet";
+                    // ctx.moveTo(cities[i].x, cities[i].y);
+                    // ctx.lineTo(cities[j].x, cities[j].y);
+                    ctx.stroke();
+                }
             }
         }
     }
-}
+    let numCities = cities.length;
 
-let colonyCount = 10;
+    this.driver = function () {
+        numCities = cities.length;
+        initializePheromoneMatrix();
+        runAntColonyOptimization();
+    }
+    function initializePheromoneMatrix() {
 
-let ants = []
-function spawnColony(){
-    for (let ant = 0; ant<colonyCount; ant++){
-        ants.push([0,0]);
+        for (let i = 0; i < numCities; i++) {
+            pheromone.push([]);
+
+            for (let j = 0; j < numCities; j++) {
+                pheromone[i][j] = 1;
+            }
+        }
+    }
+
+    function calculateDistance(city1, city2) {
+        let dx = city1.x - city2.x;
+        let dy = city1.y - city2.y;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    function calculateProbabilities(ant, currentCity) {
+        let probabilities = [];
+
+        for (let i = 0; i < numCities; i++) {
+            if (!ant.visited[i]) {
+                let pheromoneLevel = pheromone[currentCity][i];
+                let distance = calculateDistance(cities[currentCity], cities[i]);
+                let probability = Math.pow(pheromoneLevel, alpha) * Math.pow(1 / distance, beta);
+                probabilities.push({ cityIndex: i, probability });
+            }
+        }
+
+        return probabilities;
+    }
+
+    function chooseNextCity(ant, currentCity) {
+        let probabilities = calculateProbabilities(ant, currentCity);
+
+        const totalProbability = probabilities.reduce((sum, { probability }) => sum + probability, 0);
+        let random = Math.random() * totalProbability;
+
+        for (let { cityIndex, probability } of probabilities) {
+            random -= probability;
+            if (random <= 0) {
+                return cityIndex;
+            }
+        }
+
+        return probabilities[probabilities.length - 1].cityIndex;
+    }
+
+    function updatePheromone(trails) {
+        for (let i = 0; i < numCities; i++) {
+            for (let j = 0; j < numCities; j++) {
+                if (i !== j) {
+                    pheromone[i][j] *= 1 - evaporationRate;
+                }
+            }
+        }
+
+        for (let trail of trails) {
+            let trailDistance = calculateDistanceOfTrail(trail);
+
+            for (let i = 0; i < numCities - 1; i++) {
+                let from = trail[i];
+                let to = trail[i + 1];
+                pheromone[from][to] += 1 / trailDistance;
+                pheromone[to][from] += 1 / trailDistance;
+            }
+        }
+    }
+
+    this.clear = function () {
+        ctx.fillStyle = "rgb(42, 45, 67)";
+        ctx.fillRect(0, 0, el.width, el.height);
+        cities = [];
+    }
+    function calculateDistanceOfTrail(trail) {
+        let distance = 0;
+
+        for (let i = 0; i < numCities - 1; i++) {
+            let from = trail[i];
+            let to = trail[i + 1];
+            distance += calculateDistance(cities[from], cities[to]);
+        }
+
+        return distance;
+    }
+
+    function findBestTrail(trails) {
+        let bestTrail = trails[0];
+        let bestDistance = calculateDistanceOfTrail(bestTrail);
+
+        for (let i = 1; i < trails.length; i++) {
+            let trail = trails[i];
+            let distance = calculateDistanceOfTrail(trail);
+
+            if (distance < bestDistance) {
+                bestTrail = trail;
+                bestDistance = distance;
+            }
+        }
+
+        return { trail: bestTrail, distance: bestDistance };
+    }
+
+    function runAntColonyOptimization() {
+        let ants = [];
+
+        for (let i = 0; i < numAnts; i++) {
+            ants.push({ trail: [], visited: new Array(numCities).fill(false) });
+        }
+
+        let bestTrailOverall = null;
+
+        for (let iteration = 0; iteration < numIterations; iteration++) {
+            for (const ant of ants) {
+                ant.trail = [];
+                ant.visited.fill(false);
+
+                let startCity = 0;
+                ant.trail.push(startCity);
+                ant.visited[startCity] = true;
+
+                let currentCity = startCity;
+
+                while (ant.trail.length < numCities) {
+                    const nextCity = chooseNextCity(ant, currentCity);
+                    ant.trail.push(nextCity);
+                    ant.visited[nextCity] = true;
+                    currentCity = nextCity;
+                }
+
+                ant.trail.push(startCity);
+            }
+
+            let bestTrailIteration = findBestTrail(ants.map(ant => ant.trail));
+
+            if (!bestTrailOverall || bestTrailIteration.distance < bestTrailOverall.distance) {
+                bestTrailOverall = bestTrailIteration;
+            }
+
+            updatePheromone(ants.map(ant => ant.trail));
+        }
+
+        drawBestTrail(bestTrailOverall.trail);
+        console.log(`Best Distance: ${bestTrailOverall.distance}`);
+    }
+
+    function drawBestTrail(trail) {
+
+        ctx.strokeStyle = 'rgb(255, 132, 232)';
+
+        ctx.beginPath();
+        console.log(trail);
+        ctx.moveTo(cities[trail[0]].x, cities[trail[0]].y);
+
+        for (let i = 1; i < trail.length; i++) {
+            let city = cities[trail[i]];
+            ctx.lineTo(city.x, city.y);
+        }
+
+        ctx.lineTo(cities[trail[0]].x, cities[trail[0]].y);
+        ctx.strokeStyle = 'cyan';
+        ctx.stroke();
     }
 }
+
+const a = new DCanvas(document.getElementById("canv"))
+

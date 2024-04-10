@@ -38,7 +38,7 @@ function DCanvas(el) {
     }
 
     function clear() {
-        ctx.fillStyle = "rgb(83, 85, 116)";
+        ctx.fillStyle = "rgb(42, 45, 67)";
         ctx.fillRect(0, 0, el.width, el.height);
     }
 
@@ -93,7 +93,7 @@ function DCanvas(el) {
     }
 
     this.clearAll = function () {
-        ctx.fillStyle = "rgb(83, 85, 116)";
+        ctx.fillStyle = "rgb(42, 45, 67)";
         ctx.fillRect(0, 0, el.width, el.height);
         cities = [];
     }

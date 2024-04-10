@@ -5,9 +5,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Workbench:SCAN@-14&display=swap" rel="stylesheet">
     <link href="styles/style.css" rel="stylesheet" type="text/css"/>
-    <link rel="stylesheet" href="styles/Log.css" type="text/css"/>
+    <link href="styles/Neuro.css" rel="stylesheet" type="text/css"/>
     <meta charset="UTF-8">
-    <title>A start</title>
+    <title>Ants</title>
 </head>
 <header>
     <a class="header-context" id="main" href="index.html">Main</a>
@@ -19,16 +19,10 @@
     <a class="header-context" id="neuro" href="Neuro.html">Neuro</a>
 </header>
 <body>
-<div class="canvas-panel">
-    <div class="log" id="log">Log panel in future</div>
-    <div class="tool-buttons-canvas">
-        <canvas id="canvas" width="1000" height="1000"></canvas>
-        <div class="tool-buttons">
-        </div>
-    </div>
-</div>
-<script src="scripts/CanvasTools.js" defer></script>
-<script src="scripts/Ants.js" defer></script>
+<canvas id="canv" style="display: block;"></canvas>
+<button class = "inBody-button" onclick="a.clear()">Clear</button>
+<button class = "inBody-button" onclick="a.driver()">Start</button>
+<script src="scripts/Ants.js"></script>
 </body>
 <footer>
     <h1 class="footer-context"><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Vanya Baran</a></h1>
