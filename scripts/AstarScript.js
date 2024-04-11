@@ -18,7 +18,7 @@ workImg.onload = () => {
     workPattern = context.createPattern(workImg, "repeat");
 }
 
-let dimensions = 41;
+let dimensions = 21;
 
 let canvas = document.getElementById("canvas");
 let d = new DCanvas(canvas, dimensions);

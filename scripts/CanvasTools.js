@@ -4,6 +4,7 @@ let isMouseDown = false;
 function DCanvas(canvas, dims = 11){
 
     context = canvas.getContext("2d");
+
     const dimension = dims;
     const pixelLen = canvas.height / dimension;
     let gridColor = "#7F49C4FF";

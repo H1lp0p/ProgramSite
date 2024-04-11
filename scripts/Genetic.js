@@ -1,8 +1,8 @@
 function DCanvas(el) {
     let cities = [];
     ctx = el.getContext("2d");
-    el.width = 1000;
-    el.height = 1000;
+    el.width = 400;
+    el.height = 400;
     let mutationPercent = 90;
 
     function getMousePos(el, evt) {

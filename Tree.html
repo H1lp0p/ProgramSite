@@ -5,9 +5,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Workbench:SCAN@-14&display=swap" rel="stylesheet">
     <link href="styles/style.css" rel="stylesheet" type="text/css"/>
-    <link rel="stylesheet" href="styles/Log.css" type="text/css"/>
+    <link rel="stylesheet" href="styles/Tree.css" type="text/css"/>
     <meta charset="UTF-8">
-    <title>A start</title>
+    <title>Main</title>
 </head>
 <header>
     <a class="header-context" id="main" href="index.html">Main</a>
@@ -19,23 +19,10 @@
     <a class="header-context" id="neuro" href="Neuro.html">Neuro</a>
 </header>
 <body>
-<div class="canvas-panel">
-    <div class="log" id="log">Log panel in future</div>
-    <div class="tool-buttons-canvas">
-        <!--TODO: adaptive canvas size-->
-        <canvas id="canvas" width="400" height="400"></canvas>
-        <div class="tool-buttons">
-        <button class="inBody-button" id="lab">Labirint</button>
-        <button class="inBody-button" id="wall">Wall</button>
-        <button class="inBody-button" id="end">Target point</button>
-        <button class="inBody-button" id="eraser">Eraser</button>
-        <button class="inBody-button" id="clear">Clear</button>
-        <button class="inBody-button" id="start">Start</button>
-        </div>
-    </div>
-</div>
-<script src="scripts/CanvasTools.js" defer></script>
-<script src="scripts/AstarScript.js" defer></script>
+<h3 class="inBudy-simpleContent">Training data:</h3>
+<input type="file" accept="text/csv" id="TrainingFile"/>
+
+<script src="scripts/Tree.js" defer></script>
 </body>
 <footer>
     <h1 class="footer-context"><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Vanya Baran</a></h1>

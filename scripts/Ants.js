@@ -1,7 +1,7 @@
 function DCanvas(el){
     ctx = el.getContext("2d");
-    el.width = 1000;
-    el.height = 1000;
+    el.width = 400;
+    el.height = 400;
     let pheromone = [];
     let cities = [];
     const numAnts = 10;
