@@ -180,7 +180,7 @@ function Tree(csvText){
             question : question,
             entropy : startEntropy,
             questionFunc : function (val){return borderFunc[resultBorder](val, resultBorderValue);},
-            children : [`${question}_true`, `${question}_false`]
+            children : [`${question}_false`, `${question}_true`]
         };
 /*        tree.nowNode.question = question;
         tree[nowNode].entropy = startEntropy;
@@ -214,6 +214,27 @@ let nowTree;
 
 //TODO: all of cosmetic staf + little bit of restructuration of code
 
+async function viewer(tree, container, nodeName = "root"){
+    let root = document.createElement("ul");
+    root.append(tree[nodeName].question);
+
+    for (let childName of tree[nodeName].children) {
+        console.log(childName);
+        let child = document.createElement("li");
+
+        if (tree[childName].question !== "none") {
+            await viewer(tree, child, childName);
+        }
+        else{
+            let el = document.createElement("a");
+            el.append(tree[childName].result);
+            child.append(el);
+        }
+        root.append(child);
+    }
+    container.append(root);
+}
+
 document.getElementById("TrainingFile").addEventListener("change", function (){
     let reader =new FileReader();
     reader.readAsText(document.getElementById("TrainingFile").files[0]);
@@ -225,5 +246,8 @@ document.getElementById("TrainingFile").addEventListener("change", function (){
         nowTree.setIgnoreList(["person"]);
         nowTree.setTargetKey("sex");
         nowTree.TrainTree(nowTree.getTrainingData().data);
+
+        let treeContainer = document.getElementById("treeContainer");
+        viewer(nowTree.getTree(), treeContainer);
     }
 });
