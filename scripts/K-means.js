@@ -8,8 +8,6 @@ function DCanvas(el) {
     }
     let data = [];
     ctx = el.getContext("2d");
-    el.width = 400;
-    el.height = 400;
 
     let backgroundColor = "#2A2D43FF";
     let pixelColor = "#FF84E8FF";

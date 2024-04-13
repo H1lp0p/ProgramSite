@@ -233,6 +233,8 @@ button:hover{
 
 body{
     background-color: var(--main-style-black);
+    overflow: hidden;
+    display: grid;
 }
 
 canvas{
@@ -261,6 +263,8 @@ canvas{
 }
 
 .canvas-panel{
+    margin: 1px;
+    padding: 8px;
     align-content: center;
     justify-content: center;
     display: flex;

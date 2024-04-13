@@ -1,8 +1,6 @@
 function DCanvas(el) {
     let cities = [];
     ctx = el.getContext("2d");
-    el.width = 400;
-    el.height = 400;
     let mutationPercent = 90;
 
     function getMousePos(el, evt) {
@@ -262,6 +260,10 @@ function DCanvas(el) {
         return selection;
     }
 
+    this.updateCanvSize = function (){
+        //well, if you need smthng to update on resize
+    }
+
     this.path = function () {
         let population = Array(cities.length ** 2);
         for (let i = 0; i < population.length; i++) {
@@ -306,4 +308,4 @@ function DCanvas(el) {
     }
 }
 
-const c = new DCanvas(document.getElementById("canv"));
+const d = new DCanvas(document.getElementById("canv"));

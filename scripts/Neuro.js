@@ -4,9 +4,6 @@ function DCanvas(el) {
 
     let is_mouse_down = false;
 
-    canv.width = 400;
-    canv.height = 400;
-
     this.drawLine = function (x1, y1, x2, y2, color = "violet") {
         ctx.beginPath();
         ctx.strokeStyle = color;
