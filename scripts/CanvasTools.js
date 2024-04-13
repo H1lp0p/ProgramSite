@@ -6,7 +6,7 @@ function DCanvas(canvas, dims = 11){
     context = canvas.getContext("2d");
 
     const dimension = dims;
-    const pixelLen = canvas.height / dimension;
+    let pixelLen;
     let gridColor = "#7F49C4FF";
     let emptyPixel = "#2A2D43FF";
     let snakePart = "#FF84E8FF"
@@ -20,7 +20,15 @@ function DCanvas(canvas, dims = 11){
 
     let usingPattern = pattern;
 
-    canvas.width = dimension * pixelLen;
+
+
+    this.updateCanvSize = function (){
+        pixelLen = canvas.height / dimension;
+        canvas.width = dimension * pixelLen;
+        return pixelLen;
+    }
+
+    pixelLen = this.updateCanvSize();
 
     this.drawLine = function (x1, y1, x2, y2, color = gridColor){
         context.beginPath();

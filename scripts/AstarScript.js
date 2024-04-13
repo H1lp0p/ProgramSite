@@ -25,7 +25,7 @@ let d = new DCanvas(canvas, dimensions);
 
 let log = document.getElementById("log");
 
-const pixelLen = canvas.height / dimensions;
+let pixelLen = canvas.height / dimensions;
 
 function genPlane(){
     let res = []
