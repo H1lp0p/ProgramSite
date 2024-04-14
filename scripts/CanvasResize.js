@@ -4,7 +4,7 @@ window.addEventListener('resize', () => {
     canvas.height =Math.min(window.innerHeight - 300, window.innerWidth * (2/3));
     canvas.width = canvas.height;
 
-    pixelLen = d.updateCanvSize();
+    updateStats();
 });
 
 document.getElementById("canvas").height = Math.min(window.innerHeight - 300, window.innerWidth * (2/3));

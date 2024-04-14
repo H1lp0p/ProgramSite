@@ -20,10 +20,17 @@
 </header>
 
 <body>
-<canvas id="canv"></canvas>
+<div class="canvas-panel">
+    <div class="tool-buttons-canvas">
+        <canvas id="canvas" width="1000" height="1000"></canvas>
+        <div class="tool-buttons">
+            <button class = "inBody-button" onclick="c.clearAll()">clear</button>
+            <button class = "inBody-button" onclick="c.path()">create path</button>
+        </div>
+    </div>
+</div>
 <script src="scripts/Genetic.js"></script>
-<button class = "inBody-button" onclick="c.clearAll()">clear</button>
-<button class = "inBody-button" onclick="c.path()">create path</button>
+<script src="scripts/CanvasResize.js"></script>
 </body>
 <footer>
     <h1 class="footer-context"><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Vanya Baran</a></h1>

@@ -233,21 +233,6 @@ function drawSnake(way, nowHead, len){
     }
 }
 
-async function ShowPath(startY, startX, endY, endX){
-    let way = await Astar(startY, startX, endY, endX);
-    if(way.length === 0){
-        logStr(`No path from [${startY}, ${startX}] to [${endY}, ${endX}]
-`);
-    }
-    console.log(way);
-    let wave = 0;
-    for (let nowPix of way){
-        pixel(nowPix[0], nowPix[1], snakePart);
-        await  sleep(delay);
-        wave += 1;
-    }
-}
-
 function switchToWall(){
     nowState = wallPattern;
 }
@@ -275,15 +260,24 @@ function labirint(){
     plane = genLab();
     showPlane(plane);
 }
-
 async function path(){
     if (endPoints.length >= 2){
-        let begin;
-        let end;
+        let begin = endPoints[0];
+        let end = endPoints[1];
         for (let i = 1; i<endPoints.length; i++){
-            begin = endPoints[i-1];
-            end = endPoints[i];
-            await ShowPath(begin[0], begin[1], end[0], end[1]);
+            let way = await Astar(begin[0], begin[1], end[0], end[1]);
+            if (way.length === 0){
+                logStr(`No path from ${begin} to ${end}`);
+                end = endPoints[i+1];
+            }
+            else{
+                for (let nowPix of way){
+                    pixel(nowPix[0], nowPix[1], snakePart);
+                    await  sleep(delay);
+                }
+                begin = endPoints[i];
+                end = endPoints[i+1];
+            }
         }
         logStr("Complete!\n");
     }
@@ -352,6 +346,12 @@ function emtpyPixelController(y, x){
         plane[y][x] = tiles.emty;
         pixel(y, x, emptyPixel);
     }
+}
+
+function updateStats(){
+    console.log('yeyt');
+    pixelLen = canvas.height / dimensions;
+    d.updateCanvSize();
 }
 
 function mousDown(e){

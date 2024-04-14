@@ -19,10 +19,17 @@
     <a class="header-context" id="neuro" href="Neuro.html">Neuro</a>
 </header>
 <body>
-<canvas id="canv" style="display: block;"></canvas>
-<button class = "inBody-button" onclick="a.clear()">Clear</button>
-<button class = "inBody-button" onclick="a.driver()">Start</button>
+<div class="canvas-panel">
+    <div class="tool-buttons-canvas">
+        <canvas id="canvas" height="1000" width="1000"></canvas>
+        <div class="tool-buttons">
+            <button class = "inBody-button" onclick="a.clear()">Clear</button>
+            <button class = "inBody-button" onclick="a.driver()">Start</button>
+        </div>
+    </div>
+</div>
 <script src="scripts/Ants.js"></script>
+<script src="scripts/CanvasResize.js" defer></script>
 </body>
 <footer>
     <h1 class="footer-context"><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Vanya Baran</a></h1>
