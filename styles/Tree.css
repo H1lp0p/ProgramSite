@@ -6,6 +6,12 @@
 #treeContainer{
     color: var(--main-style-pink);
     justify-content: center;
+
+}
+
+.tree {
+    justify-content: space-around;
+
 }
 
 .tree ul {
@@ -99,7 +105,7 @@
     text-decoration: none;
     color: var(--main-style-pink);
     /*font-family: arial, verdana, tahoma;*/
-    font-size: 200%;
+    font-size: 3vh;
     display: inline-block;
     z-index: 100;
 

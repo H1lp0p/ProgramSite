@@ -22,22 +22,25 @@
 <body>
 <div class="pain-panel">
     <div class="worker">
-        <img src="images/FirstOne.png">
+        <img src="images/FirstOne.png" alt="well, there used to be tired worker">
     </div>
-    <div class="dialogue-wind inBudy-simpleContent">
-        <div id="treeContainer" class="tree inBudy-simpleContent">
-            <!--<&#45;&#45;false : true&ndash;&gt;-->
-            <input type="checkbox" name="fuck" class="custom-checkBox"><=
-        </div>
+    <div class="dialogue-wind inBudy-simpleContent" id="dialog">
+        -> Hello and welcome to the TREE.CORP (R). There, we help you to get decision tree on your data sets.<br>
+        -> Choose training data below
     </div>
     <div class="tool-buttons" id="panel">
-        <form action="">
+            <div id="trainingContainer">
                 <h3 class="inBudy-simpleContent">Training data:</h3>
                 <input type="file" accept="text/csv" id="TrainingFile"/>
                 <label for="TrainingFile" class="inBody-button">Chose file</label>
                 <span class="inBudy-simpleContent" id="trainingFileName"></span>
-                <input type="submit" id="submit"/>
-        </form>
+            </div>
+            <div id="testContainer">
+                <h3 class="inBudy-simpleContent">Testing data:</h3>
+                <input type="file" accept="text/csv" id="TestFile"/>
+                <label for="TestFile" class="inBody-button">Chose file</label>
+                <span class="inBudy-simpleContent" id="TestFileName"></span>
+            </div>
     </div>
 </div>
 <script src="scripts/Tree.js" defer></script>

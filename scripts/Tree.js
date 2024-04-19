@@ -29,23 +29,21 @@ function Tree(csvText){
 
     this.setIgnoreList = function (keys){
         ignoreKeys.clear();
+        ignoreKeys.add(targetKey);
         for (let key of keys){
             ignoreKeys.add(key);
         }
-        console.log(ignoreKeys);
     }
 
     this.setTargetKey = function (key){
-
         for (let nowKey of trainingData["keys"]){
             if (nowKey === key){
+                ignoreKeys.delete(targetKey);
                 targetKey = key;
-                ignoreKeys.add(key);
+                ignoreKeys.add(targetKey);
                 return;
             }
         }
-        console.log(trainingData["keys"]);
-        console.log("there is no such key as " + key + " in training data set.");
     }
 
     this.getKeys = function (){
@@ -115,10 +113,10 @@ function Tree(csvText){
         return res;
     }
 
-    this.TrainTree = async function (nowData, nowNode = "root"){
+    this.TrainTree = async function (nowData, nowNode = "root", nowHeight = 0){
         let startEntropy = this.entropy(nowData, targetKey);
         //console.log(nowData);
-        if (startEntropy <= minEntropy){
+        if (startEntropy <= minEntropy || nowHeight >= maxHeight){
             tree[nowNode] = {
                 question : "none",
                 result : this.chooseVal(nowData)
@@ -147,7 +145,7 @@ function Tree(csvText){
                 nowValuse.push(el[atribute]);
             }
             let border = (isNum) ? ">" : "==";
-            let borderValue;
+            let borderValue = -1;
 
             let valueSet = new Set(nowValuse);
             let infoWin = -1;
@@ -181,24 +179,32 @@ function Tree(csvText){
 
         let question = this.genQuestion(resultAtribute, resultBorder, resultBorderValue);
         tree[nowNode] = {
+            layer : nowHeight,
             question : question,
             entropy : startEntropy,
-            questionFunc : function (val){return borderFunc[resultBorder](val, resultBorderValue);},
+            attribute : resultAtribute,
+            borderVal : resultBorderValue,
+            borderSign : resultBorder,
             children : [`${question}_false`, `${question}_true`]
         };
-/*        tree.nowNode.question = question;
-        tree[nowNode].entropy = startEntropy;
-        tree[nowNode].questionFunc = function (val){return borderFunc[resultBorder](val, resultBorderValue);};
-        tree[nowNode].children = [`${question}_true`, `${question}_false`];*/
         tree[`${question}_true`] = {};
         tree[`${question}_false`] = {};
 
-        this.TrainTree(leftSide, `${question}_false`);
-        this.TrainTree(rightSide, `${question}_true`);
+        this.TrainTree(leftSide, `${question}_false`, nowHeight + 1);
+        this.TrainTree(rightSide, `${question}_true`, nowHeight + 1);
     }
 
     this.getTree = function (){
         return tree;
+    }
+
+    this.debugStats = function (){
+        return [trainingData, ignoreKeys, targetKey];
+    }
+
+    this.calcQuest = function (value, border, borderValue){
+        //console.log(border, value, borderValue, borderFunc[border](value, borderValue));
+        return borderFunc[border](value, borderValue);
     }
 
     //Data to create decision tree
@@ -211,6 +217,7 @@ function Tree(csvText){
     let ignoreKeys = new Set();
     //when entropy cross this minimum, tree stops growing
     let minEntropy = 0.0001;
+    let maxHeight = 10;
 }
 
 //TODO: all of cosmetic staf + little bit of restructuration of code
@@ -222,20 +229,20 @@ async function viewer(tree, container, nodeName = "root"){
     let children = document.createElement("ul");
     quest.append(tree[nodeName].question);
 
+    if(tree[nodeName].children.length !== 0){
+        for (let childName of tree[nodeName].children) {
+            let child = document.createElement("li");
 
-    for (let childName of tree[nodeName].children) {
-        console.log(childName);
-        let child = document.createElement("li");
-
-        if (tree[childName].question !== "none") {
-            await viewer(tree, child, childName);
+            if (tree[childName].question !== "none") {
+                await viewer(tree, child, childName);
+            }
+            else{
+                let el = document.createElement("a");
+                el.append(tree[childName].result);
+                child.append(el);
+            }
+            children.append(child);
         }
-        else{
-            let el = document.createElement("a");
-            el.append(tree[childName].result);
-            child.append(el);
-        }
-        children.append(child);
     }
     node.append(quest);
     node.append(children);

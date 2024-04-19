@@ -53,6 +53,7 @@ h2{
 
 header {
     display: flex;
+    flex-wrap: wrap;
     margin-top: 0;
     outline: solid var(--main-style-blue);
     height: 75px;
@@ -118,7 +119,7 @@ footer {
     outline: solid var(--main-style-blue);
     height: 75px;
     background-color: var(--main-style-dark);
-    padding: 0px 0px 0px;
+    padding: 0 0 0;
     align-content: center;
     justify-content: center;
 }
@@ -206,7 +207,7 @@ button:hover{
     background: var(--main-style-blue);
     outline: none;
     border: 7px rgb(255, 132, 232);
-    border-radius: 0px;
+    border-radius: 0;
 }
 
 .showRanCol{
@@ -227,7 +228,7 @@ button:hover{
     background:var(--main-style-pink);
     cursor: pointer;
     border: 5px var(--main-style-pink);
-    border-radius: 0px;
+    border-radius: 0;
 }
 
 /* for firefox */
@@ -269,7 +270,7 @@ canvas{
 }
 
 .tool-buttons{
-    padding-left: 0px;
+    padding-left: 0;
     align-content: center;
 }
 
@@ -285,7 +286,7 @@ canvas{
     font-family: "Workbench", sans-serif;
     color: var(--main-style-pink);
     animation-duration: 0.01s;
-    animation-name: textFlicker;
+/*    animation-name: textFlicker;
     animation-iteration-count: infinite;
-    animation-direction: alternate;
+    animation-direction: alternate;*/
 }

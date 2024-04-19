@@ -1,25 +1,51 @@
 input[type=file],
-input[type=submit]{
+input[type=submit],
+input[type=checkbox]{
     width: 0;
     height: 0;
     opacity: 0;
-}
-
-input[type=checkbox]{
-    opacity: 0;
-}
-
-input[type=checkbox]:checked{
-    opacity: 1;
-    background-color: var(--main-style-black);
 }
 
 body{
     align-content: center;
 }
 
-.custom-checkBox+label{
+.checkbox-label {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    justify-content: center;
+    align-content: center;
+}
 
+.checkbox-label input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.custom-checkbox {
+    position: absolute;
+    left: 10px;
+    height: 10px;
+    width: 10px;
+    background-color: var(--main-style-black);
+}
+
+.checkbox-label:hover input ~ .custom-checkbox {
+    border-left: dashed 3px var(--main-style-blue);
+    border-right: dashed 3px var(--main-style-blue);
+}
+
+.checkbox-label input:checked ~ .custom-checkbox {
+    background-color: var(--main-style-pink);
 }
 
 .pain-panel{
@@ -33,13 +59,30 @@ body{
 }
 
 .dialogue-wind{
+    padding: 10px;
     grid-row: 1;
     grid-column: 2;
     border: solid var(--main-style-blue);
     border-left: dashed var(--main-style-blue);
     border-right: dashed var(--main-style-blue);
     min-width: 30vw;
+    max-width: 70vh;
     min-height: 50vh;
+    max-height: 50vh;
+    overflow-y: scroll;
+    overflow-x: auto;
+}
+
+.dialogue-wind::-webkit-scrollbar{
+    width: 15px;
+}
+
+.dialogue-wind::-webkit-scrollbar-track{
+    background-color: var(--main-style-black);
+}
+
+.dialogue-wind::-webkit-scrollbar-thumb{
+    background-color: var(--main-style-pink);
 }
 
 .worker{
@@ -62,5 +105,15 @@ body{
 }
 
 img{
-    width: 10vw;
+    width: 15vw;
+}
+
+#panel{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.dialogue-wind button,
+.dialogue-wind button:hover{
+    font-size: 3vh;
 }
