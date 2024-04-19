@@ -77,6 +77,10 @@ body{
     width: 15px;
 }
 
+.dialogue-wind::-webkit-scrollbar-corner{
+    background-color: var(--main-style-black);
+}
+
 .dialogue-wind::-webkit-scrollbar-track{
     background-color: var(--main-style-black);
 }
@@ -116,4 +120,8 @@ img{
 .dialogue-wind button,
 .dialogue-wind button:hover{
     font-size: 3vh;
+}
+
+#panel div{
+    padding: 8px;
 }
