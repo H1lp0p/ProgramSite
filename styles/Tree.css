@@ -1,22 +1,136 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
 #treeContainer{
-    position: relative;
-    overflow: auto;
-    padding: 0 0 20px 0;
+    color: var(--main-style-pink);
+    justify-content: center;
 }
 
-ul {
+.tree ul {
+    padding-top: 20px;
     position: relative;
-    padding: 20px 0;
-    border: var(--main-style-pink);
-    justify-content: space-around;
+
+    display: flex;
+    justify-content: center;
+
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
 }
 
-li {
-    list-style-type: none;
+.tree li {
+    white-space: nowrap;
     float: left;
-    position: relative;
-    padding: 1em;
     text-align: center;
-    justify-content: space-around;
-    border: var(--main-style-pink);
+    list-style-type: none;
+    position: relative;
+    padding: 20px 5px 0 5px;
+
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+}
+
+/*We will use ::before and ::after to draw the connectors*/
+
+.tree li::before, .tree li::after{
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 50%;
+    border-top: 3px solid var(--main-style-blue);
+    width: 50%;
+    height: 20px;
+}
+.tree li::after{
+    right: auto;
+    left: 50%;
+    border-left: 3px dashed var(--main-style-blue);
+}
+
+/*We need to remove left-right connectors from elements without
+ any siblings*/
+.tree li:only-child::after, .tree li:only-child::before {
+    display: none;
+}
+
+/*Remove space from the top of single children*/
+.tree li:only-child{
+    padding-top: 0;
+}
+
+/*Remove left connector from first child and
+ right connector from last child*/
+.tree li:first-child::before, .tree li:last-child::after{
+    border: 0 none;
+}
+/*Adding back the vertical connector to the last nodes*/
+.tree li:last-child::before{
+    border-right: 3px dashed var(--main-style-blue);
+/*    -webkit-border-radius: 0 5px 0 0;
+    -moz-border-radius: 0 5px 0 0;*/
+}
+.tree li:first-child::after{
+/*    border-radius: 5px 0 0 0;
+    -webkit-border-radius: 5px 0 0 0;
+    -moz-border-radius: 5px 0 0 0;*/
+}
+
+/*Time to add downward connectors from parents*/
+.tree ul ul::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    border-left: 3px dashed var(--main-style-blue);
+    width: 0;
+    height: 20px;
+}
+
+.tree li a{
+    background-color: var(--main-style-black);
+    margin: 0;
+    border: none;
+    border-left: 3px dashed var(--main-style-blue);
+    border-right: 3px dashed var(--main-style-blue);
+    padding: 5px 10px;
+    text-decoration: none;
+    color: var(--main-style-pink);
+    /*font-family: arial, verdana, tahoma;*/
+    font-size: 200%;
+    display: inline-block;
+    z-index: 100;
+
+/*    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;*/
+
+/*    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;*/
+}
+
+/*Time for some hover effects*/
+/*We will apply the hover effect the the lineage of the element also*/
+.tree li a:hover, .tree li a:hover+ul li a {
+    /*background: #c8e4f8;
+    color: #000;*/
+    border: none;
+    border-left: 3px dashed var(--main-style-light-pink);
+    border-right: 3px dashed var(--main-style-light-pink);
+}
+
+/*Connector styles on hover*/
+.tree li a:hover+ul,
+.tree li a:hover+ul,
+.tree li a:hover+,
+.tree li a:hover+ul{
+    border: none;
+    border-left: 3px dashed var(--main-style-blue);
+    border-right: 3px dashed var(--main-style-blue);
+}
+
+.tree li::after{
+    color: var(--main-style-light-pink);
 }

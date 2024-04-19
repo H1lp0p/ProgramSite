@@ -111,7 +111,7 @@ function genLab(){
 
 function showPlane(plane){
     d.drawGrid();
-    console.log(plane);
+    //console.log(plane);
     for (let y = 0; y<dimensions;y++){
         for(let x = 0; x<dimensions; x++){
             pixel(y,x, emptyPixel);
@@ -123,7 +123,6 @@ function showPlane(plane){
                     pixel(y, x, snakePart);
                     break;
                 default:
-                    pixel(y, x, emptyPixel);
                     break;
             }
         }
@@ -252,32 +251,35 @@ function grid(){
 function clear(){
     endPoints = [];
     logPoints(endPoints);
-    plane = genLab();
+    plane = genPlane();
     showPlane(plane);
 }
 
 function labirint(){
+    endPoints = [];
     plane = genLab();
     showPlane(plane);
 }
 async function path(){
     if (endPoints.length >= 2){
         let begin = endPoints[0];
-        let end = endPoints[1];
-        for (let i = 1; i<endPoints.length; i++){
+        let nowEnd = 1;
+        while(nowEnd < endPoints.length){
+            let end = endPoints[nowEnd];
             let way = await Astar(begin[0], begin[1], end[0], end[1]);
             if (way.length === 0){
                 logStr(`No path from ${begin} to ${end}`);
-                end = endPoints[i+1];
+                await sleep(2000);
             }
             else{
                 for (let nowPix of way){
                     pixel(nowPix[0], nowPix[1], snakePart);
+                    console.log(nowPix);
                     await  sleep(delay);
                 }
-                begin = endPoints[i];
-                end = endPoints[i+1];
+                begin = endPoints[nowEnd];
             }
+            nowEnd +=1;
         }
         logStr("Complete!\n");
     }
@@ -349,8 +351,10 @@ function emtpyPixelController(y, x){
 }
 
 function updateStats(){
-    console.log('yeyt');
-    pixelLen = canvas.height / dimensions;
+    pixelLen = parseInt(canvas.height / dimensions);
+    canvas.height = pixelLen * dimensions;
+    canvas.width = pixelLen * dimensions;
+    clear();
     d.updateCanvSize();
 }
 
@@ -372,4 +376,5 @@ function mousDown(e){
     }
 }
 
+updateStats();
 canvas.addEventListener("mousedown",mousDown);

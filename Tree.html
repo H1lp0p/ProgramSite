@@ -6,6 +6,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Workbench:SCAN@-14&display=swap" rel="stylesheet">
     <link href="styles/style.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="styles/Tree.css" type="text/css"/>
+    <link rel="stylesheet" href="styles/TreePanel.css" type="text/css"/>
     <meta charset="UTF-8">
     <title>Main</title>
 </head>
@@ -19,53 +20,28 @@
     <a class="header-context" id="neuro" href="Neuro.html">Neuro</a>
 </header>
 <body>
-<h3 class="inBudy-simpleContent">Training data:</h3>
-<input type="file" accept="text/csv" id="TrainingFile"/>
-
-<div id="treeContainer" class="inBudy-simpleContent">
-        <!--<ul>
-            <li>
-                <a href="#">Отец</a>
-                <ul>
-                    <li>
-                        <a href="#">Сын</a>
-                        <ul>
-                            <li>
-                                <a href="#">Внук</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#">Дочь</a>
-                        <ul>
-                            <li>
-                                <a href="#">Внучка</a>
-                            </li>
-                            <li>
-                                <a href="#">Внук</a>
-                                <ul>
-                                    <li>
-                                        <a href="#">Правнучка</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Правнук</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Правнучка</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#">Внучка</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-        </ul>-->
+<div class="pain-panel">
+    <div class="worker">
+        <img src="images/FirstOne.png">
+    </div>
+    <div class="dialogue-wind inBudy-simpleContent">
+        <div id="treeContainer" class="tree inBudy-simpleContent">
+            <!--<&#45;&#45;false : true&ndash;&gt;-->
+            <input type="checkbox" name="fuck" class="custom-checkBox"><=
+        </div>
+    </div>
+    <div class="tool-buttons" id="panel">
+        <form action="">
+                <h3 class="inBudy-simpleContent">Training data:</h3>
+                <input type="file" accept="text/csv" id="TrainingFile"/>
+                <label for="TrainingFile" class="inBody-button">Chose file</label>
+                <span class="inBudy-simpleContent" id="trainingFileName"></span>
+                <input type="submit" id="submit"/>
+        </form>
+    </div>
 </div>
-
 <script src="scripts/Tree.js" defer></script>
+<script src="scripts/TreeControlPanel.js" defer></script>
 </body>
 <footer>
     <h1 class="footer-context"><a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">Vanya Baran</a></h1>

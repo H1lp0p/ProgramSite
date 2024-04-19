@@ -31,7 +31,7 @@
     }
     to{
         text-shadow: 2px 1px 2px var(--main-style-light-pink);
-        filter: blur(1px);
+        /*filter: blur(1px);*/
     }
 }
 
@@ -41,7 +41,7 @@
     }
     to{
         text-shadow: 2px 1px 2px var(--main-style-dark-blue);
-        filter: blur(1px);
+        /*filter: blur(1px);*/
     }
 }
 
@@ -175,6 +175,11 @@ button:hover{
     font-family: "Workbench", sans-serif;
     font-size: 200%;
     color: var(--main-style-pink);
+
+    animation-duration: 0.01s;
+    animation-name: interactiveFlicker;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
 }
 
 .inBody-button:hover{
@@ -187,6 +192,11 @@ button:hover{
     font-family: "Workbench", sans-serif;
     font-size: 200%;
     color: var(--main-style-dark);
+
+    animation-duration: 0.01s;
+    animation-name: inverseInteractiveFlicker;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
 }
 
 .slider {

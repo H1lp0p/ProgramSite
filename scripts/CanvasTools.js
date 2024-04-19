@@ -25,7 +25,6 @@ function DCanvas(canvas, dims = 11){
     this.updateCanvSize = function (){
         pixelLen = canvas.height / dimension;
         canvas.width = dimension * pixelLen;
-        return pixelLen;
     }
 
     pixelLen = this.updateCanvSize();

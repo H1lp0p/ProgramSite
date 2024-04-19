@@ -48,6 +48,10 @@ function Tree(csvText){
         console.log("there is no such key as " + key + " in training data set.");
     }
 
+    this.getKeys = function (){
+        return trainingData.keys;
+    }
+
     this.getTrainingData = function (){
         return trainingData;
     }
@@ -209,14 +213,15 @@ function Tree(csvText){
     let minEntropy = 0.0001;
 }
 
-
-let nowTree;
-
 //TODO: all of cosmetic staf + little bit of restructuration of code
 
 async function viewer(tree, container, nodeName = "root"){
     let root = document.createElement("ul");
-    root.append(tree[nodeName].question);
+    let node = document.createElement("li");
+    let quest = document.createElement("a");
+    let children = document.createElement("ul");
+    quest.append(tree[nodeName].question);
+
 
     for (let childName of tree[nodeName].children) {
         console.log(childName);
@@ -230,24 +235,11 @@ async function viewer(tree, container, nodeName = "root"){
             el.append(tree[childName].result);
             child.append(el);
         }
-        root.append(child);
+        children.append(child);
     }
+    node.append(quest);
+    node.append(children);
+    root.append(node);
     container.append(root);
 }
 
-document.getElementById("TrainingFile").addEventListener("change", function (){
-    let reader =new FileReader();
-    reader.readAsText(document.getElementById("TrainingFile").files[0]);
-
-    reader.onload = function (){
-        let nowFile =reader.result;
-        nowTree = new Tree(nowFile);
-        console.log(nowTree.getTrainingData());
-        nowTree.setIgnoreList(["person"]);
-        nowTree.setTargetKey("sex");
-        nowTree.TrainTree(nowTree.getTrainingData().data);
-
-        let treeContainer = document.getElementById("treeContainer");
-        viewer(nowTree.getTree(), treeContainer);
-    }
-});
