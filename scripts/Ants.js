@@ -1,5 +1,6 @@
 function DCanvas(el){
     ctx = el.getContext("2d");
+
     let pheromone = [];
     let cities = [];
     const numAnts = 10;
@@ -10,7 +11,7 @@ function DCanvas(el){
     ctx.fillStyle = "rgb(42, 45, 67)";
     ctx.strokeStyle = 'rgb(255, 132, 232)';
     function getMousePos(el, evt) {
-        var rect = el.getBoundingClientRect();
+        let rect = el.getBoundingClientRect();
         return {x: evt.clientX - rect.left, y: evt.clientY - rect.top};
     }
 
@@ -33,8 +34,6 @@ function DCanvas(el){
                 for (let j = i + 1; j < cities.length; j++) {
                     ctx.beginPath();
                     ctx.strokeStyle = "violet";
-                    // ctx.moveTo(cities[i].x, cities[i].y);
-                    // ctx.lineTo(cities[j].x, cities[j].y);
                     ctx.stroke();
                 }
             }
@@ -190,7 +189,6 @@ function DCanvas(el){
         }
 
         drawBestTrail(bestTrailOverall.trail);
-        console.log(`Best Distance: ${bestTrailOverall.distance}`);
     }
 
     function drawBestTrail(trail) {
@@ -198,7 +196,6 @@ function DCanvas(el){
         ctx.strokeStyle = 'rgb(255, 132, 232)';
 
         ctx.beginPath();
-        console.log(trail);
         ctx.moveTo(cities[trail[0]].x, cities[trail[0]].y);
 
         for (let i = 1; i < trail.length; i++) {
@@ -212,5 +209,5 @@ function DCanvas(el){
     }
 }
 
-const a = new DCanvas(document.getElementById("canv"))
+const d = new DCanvas(document.getElementById("canvas"))
 

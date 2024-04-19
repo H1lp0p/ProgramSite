@@ -22,7 +22,8 @@ function DCanvas(el) {
         ctx.fill();
     }
     this.clear = function () {
-        ctx.clearRect(0, 0, canv.width, canv.height);
+        ctx.fillStyle = "rgb(42, 45, 67)";
+        ctx.fillRect(0, 0, el.width, el.height);
     }
     this.drawGrid = function () {
         const w = canv.width;
@@ -121,35 +122,6 @@ function DCanvas(el) {
                 output[j] += hidden[i] * weightsHiOut[i * 10 + j];
             }
         }
-
-        ans = 0;
-        ansInd = 0;
-        for (i = 0; i < 10; i++) {
-            if (output[i] > ans) {
-                ans = output[i];
-                ansInd = i;
-            }
-        }
-        alert(ansInd);
-
-
-        // let z = [];
-        // let y = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-        // //y[] = 1;
-        // let sum = 0;
-        // for (i = 0; i < 10; i++) {
-        //     sum += Math.exp(output[i]);
-        // }
-        //
-        //
-        // for (i = 0; i < 10; i++) {
-        //     z.push(Math.exp(output[i]) / sum);
-        //     CrossEntr += y[i] * Math.log(z[i]);
-        // }
-
-
-
-        return vector;
     }
 
     el.addEventListener("mousedown", function (e) {
@@ -179,4 +151,7 @@ function DCanvas(el) {
 }
 
 
-const d = new DCanvas(document.getElementById("canv"));
+const d = new DCanvas(document.getElementById("canvas"));
+function updateStats() {
+    d.clear();
+}

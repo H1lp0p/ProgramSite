@@ -1,16 +1,19 @@
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 function DCanvas(el) {
     let cities = [];
     ctx = el.getContext("2d");
-    let mutationPercent = 90;
+    let mutationPercent = 80;
 
     function getMousePos(el, evt) {
-        var rect = el.getBoundingClientRect();
+        let rect = el.getBoundingClientRect();
         return {x: evt.clientX - rect.left, y: evt.clientY - rect.top};
     }
 
     el.addEventListener("mousedown", function (evt) {
         is_mouse_down = true;
         ctx.beginPath();
+        stopCheck = 0;
         if (is_mouse_down) {
             add(evt);
         }
@@ -52,6 +55,7 @@ function DCanvas(el) {
         ctx.strokeStyle = "violet";
         for (let i = 0; i < cities.length - 1; i++) {
             for (let j = i + 1; j < cities.length; j++) {
+
                 ctx.beginPath();
                 ctx.moveTo(cities[i][0], cities[i][1]);
                 ctx.lineTo(cities[j][0], cities[j][1]);
@@ -72,21 +76,12 @@ function DCanvas(el) {
         }
     }
 
-    function draw(best) {
-        let milsec = 100;
+    async function draw(best) {
         for (let i = 0; i < best.length; i++) {
-            setTimeout(() => {
-                create();
-            }, milsec);
-            // clear();
-            // create();
-            setTimeout(() => {
-                ctx.lineWidth = 5;
-            }, milsec);
-            setTimeout(() => {
-                drawPath(best, i);
-            }, milsec);
-            milsec += 100;
+            await sleep(100);
+            create();
+            ctx.lineWidth = 5;
+            drawPath(best, i);
         }
     }
 
@@ -114,7 +109,6 @@ function DCanvas(el) {
             child2.push(y[i]);
         }
         for (let i = ind; i < y.length - 1; i++) {
-            let flag1 = 0;
             let flag2 = 0;
             for (let j = 0; j < child1.length; j++) {
                 if (y[i][0] === child1[j][0] && y[i][1] === child1[j][1]) {
@@ -127,7 +121,6 @@ function DCanvas(el) {
         }
         for (let i = ind; i < x.length - 1; i++) {
             let flag1 = 0;
-            let flag2 = 0;
             for (let j = 0; j < child2.length; j++) {
                 if (x[i][0] === child2[j][0] && x[i][1] === child2[j][1]) {
                     flag1 = 1;
@@ -137,7 +130,7 @@ function DCanvas(el) {
                 child2.push(x[i]);
             }
         }
-        if(child1.length !== y.length - 2) {
+        if (child1.length !== y.length - 2) {
             let flag = 0;
             for (let i = 0; i < y.length - 1; i++) {
                 flag = 0;
@@ -151,7 +144,7 @@ function DCanvas(el) {
                 }
             }
         }
-        if(child2.length !== x.length - 2) {
+        if (child2.length !== x.length - 2) {
             let flag = 0;
             for (let i = 0; i < x.length - 1; i++) {
                 flag = 0;
@@ -160,17 +153,15 @@ function DCanvas(el) {
                         flag = 1;
                     }
                 }
-                if (flag === 0){
+                if (flag === 0) {
                     child2.push(x[i]);
                 }
             }
         }
-        console.log(child1,child2);
         let length1 = 0;
         let length2 = 0;
         child1.push(child1[0]);
         child2.push(child2[0]);
-        console.log(child1.length, child2.length);
         for (let j = 0; j < child1.length - 1; j++) {
             length1 += dist(child1[j][0], child1[j][1], child1[j + 1][0], child1[j + 1][1]);
             length2 += dist(child2[j][0], child2[j][1], child2[j + 1][0], child2[j + 1][1]);
@@ -183,8 +174,7 @@ function DCanvas(el) {
     function mutation(way) {
         let ind1 = random(1, way.length - 2);
         let ind2 = random(1, way.length - 2);
-        let temp = [];
-        temp = way[ind1];
+        let temp = way[ind1];
         way[ind1] = way[ind2];
         way[ind2] = temp;
         let length = 0;
@@ -234,7 +224,6 @@ function DCanvas(el) {
             } else
                 return -1
         });
-        console.log(population);
         let selection = Array();
         if (population.length % 2 !== 0) {
             for (let i = 0; i < population.length / 2 - 2; i += 2) {
@@ -260,12 +249,8 @@ function DCanvas(el) {
         return selection;
     }
 
-    this.updateCanvSize = function (){
-        //well, if you need smthng to update on resize
-    }
-
     this.path = function () {
-        let population = Array(cities.length ** 2);
+        let population = Array(cities.length ** 3);
         for (let i = 0; i < population.length; i++) {
             population[i] = [];
         }
@@ -303,9 +288,12 @@ function DCanvas(el) {
             }
             c++;
         }
-        console.log(bestPopulations);
         draw(bestPopulations);
     }
 }
 
-const d = new DCanvas(document.getElementById("canv"));
+const d = new DCanvas(document.getElementById("canvas"));
+
+function updateStats() {
+    d.clearAll();
+}

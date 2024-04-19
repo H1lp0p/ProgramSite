@@ -1,6 +1,5 @@
 let isMouseDown = false;
 
-//TODO: drawing func (for UDOUNO & H1p0 variants)
 function DCanvas(canvas, dims = 11){
 
     context = canvas.getContext("2d");
@@ -9,7 +8,6 @@ function DCanvas(canvas, dims = 11){
     let pixelLen;
     let gridColor = "#7F49C4FF";
     let emptyPixel = "#2A2D43FF";
-    let snakePart = "#FF84E8FF"
     const img = new Image();
     img.src = "../images/PixelPattern.png";
     let pattern;
@@ -27,9 +25,9 @@ function DCanvas(canvas, dims = 11){
         canvas.width = dimension * pixelLen;
     }
 
-    pixelLen = this.updateCanvSize();
+    this.updateCanvSize();
 
-    this.drawLine = function (x1, y1, x2, y2, color = gridColor){
+    this.drawLine = function (x1, y1, x2, y2){
         context.beginPath();
         context.fillStyle = pattern;
         context.strokeStyle = pattern;

@@ -1,7 +1,7 @@
 function DCanvas(el) {
     const numberOfCluster = document.getElementById("numberOfCluster");
     const clusterNumDemo = document.getElementById("clusterNumDemo");
-    var numOfClust;
+    let numOfClust;
     numberOfCluster.oninput = function () {
         clusterNumDemo.innerHTML = this.value;
         numOfClust = parseInt(numberOfCluster.value);
@@ -9,11 +9,10 @@ function DCanvas(el) {
     let data = [];
     ctx = el.getContext("2d");
 
-    let backgroundColor = "#2A2D43FF";
     let pixelColor = "#FF84E8FF";
 
     function getMousePos(el, evt) {
-        var rect = el.getBoundingClientRect();
+        let rect = el.getBoundingClientRect();
         return {x: evt.clientX - rect.left, y: evt.clientY - rect.top};
     }
 
@@ -54,126 +53,129 @@ function DCanvas(el) {
     }
 
     this.claster = function () {
-        let centres = Array(numOfClust);
-        for (let i = 0; i < numOfClust; i++) {
-            centres[i] = Array(numOfClust);
-        }
-        let res = [];
-        let mean = Array(2);
-        let disp = Array(2);
-        let sumA = 0;
-        let sumB = 0;
-        for (let i = 0; i < data.length; i++) {
-            sumA += data[i][0];
-            sumB += data[i][1];
-        }
-        mean[0] = sumA / data.length;
-        mean[1] = sumB / data.length;
-        let sumDispA = 0;
-        let sumDispB = 0;
-        for (let i = 0; i < data.length; i++) {
-            sumDispA += Math.abs(data[i][0] - mean[0]);
-            sumDispB += Math.abs(data[i][1] - mean[1]);
-        }
-        disp[0] = sumDispA / data.length;
-        disp[1] = sumDispB / data.length;
-        for (let i = 0; i < numOfClust; i++) {
-            centres[i][0] = randomNormal(mean, disp)[0];
-            centres[i][1] = randomNormal(mean, disp)[1];
-        }
-        for (let z = 0; z < 100; z++) {
-            let x = [];
+        if(data.length !== 0)
+        {
+            let centres = Array(numOfClust);
             for (let i = 0; i < numOfClust; i++) {
-                x[i] = new Array();
+                centres[i] = Array(numOfClust);
             }
+            let res = [];
+            let mean = Array(2);
+            let disp = Array(2);
+            let sumA = 0;
+            let sumB = 0;
             for (let i = 0; i < data.length; i++) {
-                let range = [];
-                let min = 9999;
-                let minInd = 0;
-                for (let j = 0; j < numOfClust; j++) {
-                    range.push(dist(centres[j][0], centres[j][1], data[i][0], data[i][1]));
+                sumA += data[i][0];
+                sumB += data[i][1];
+            }
+            mean[0] = sumA / data.length;
+            mean[1] = sumB / data.length;
+            let sumDispA = 0;
+            let sumDispB = 0;
+            for (let i = 0; i < data.length; i++) {
+                sumDispA += Math.abs(data[i][0] - mean[0]);
+                sumDispB += Math.abs(data[i][1] - mean[1]);
+            }
+            disp[0] = sumDispA / data.length;
+            disp[1] = sumDispB / data.length;
+            for (let i = 0; i < numOfClust; i++) {
+                centres[i][0] = randomNormal(mean, disp)[0];
+                centres[i][1] = randomNormal(mean, disp)[1];
+            }
+            for (let z = 0; z < 100; z++) {
+                let x = [];
+                for (let i = 0; i < numOfClust; i++) {
+                    x[i] = new Array();
                 }
-                for (let j = 0; j < numOfClust; j++) {
-                    if (min > range[j]) {
-                        console.log(min);
-                        min = range[j];
-                        console.log(min);
-                        minInd = j;
+                for (let i = 0; i < data.length; i++) {
+                    let range = [];
+                    let min = 9999;
+                    let minInd = 0;
+                    for (let j = 0; j < numOfClust; j++) {
+                        range.push(dist(centres[j][0], centres[j][1], data[i][0], data[i][1]));
+                    }
+                    for (let j = 0; j < numOfClust; j++) {
+                        if (min > range[j]) {
+                            min = range[j];
+                            minInd = j;
+                        }
+                    }
+                    x[minInd].push(data[i]);
+                }
+                for (let i = 0; i < numOfClust; i++) {
+                    let sumX = 0;
+                    let sumY = 0;
+                    for (let j = 0; j < x[i].length; j++) {
+                        sumX += x[i][j][0];
+                        sumY += x[i][j][1];
+                    }
+                    centres[i][0] = sumX / x[i].length;
+                    centres[i][1] = sumY / x[i].length;
+                }
+                res = x;
+                for (let u = 0; u < numOfClust; u++) {
+                    if (res[u].length === 0) {
+                        centres[u][0] = randomNormal(mean, disp)[0];
+                        centres[u][1] = randomNormal(mean, disp)[1];
+                        z--;
                     }
                 }
-                x[minInd].push(data[i]);
             }
-            for (let i = 0; i < numOfClust; i++) {
-                let sumX = 0;
-                let sumY = 0;
-                for (let j = 0; j < x[i].length; j++) {
-                    sumX += x[i][j][0];
-                    sumY += x[i][j][1];
+            clearDr();
+            for (let i = 0; i < res.length; i++) {
+                for (let j = 0; j < res[i].length; j++) {
+                    if (i === 0) {
+                        ctx.fillStyle = "aqua";
+                        ctx.strokeStyle = "aqua";
+                    }
+                    if (i === 1) {
+                        ctx.fillStyle = "red";
+                        ctx.strokeStyle = "red";
+                    }
+                    if (i === 2) {
+                        ctx.fillStyle = "green";
+                        ctx.strokeStyle = "green";
+                    }
+                    if (i === 3) {
+                        ctx.fillStyle = "yellow";
+                        ctx.strokeStyle = "yellow";
+                    }
+                    if (i === 4) {
+                        ctx.fillStyle = "white";
+                        ctx.strokeStyle = "white";
+                    }
+                    if (i === 5) {
+                        ctx.fillStyle = "black";
+                        ctx.strokeStyle = "black";
+                    }
+                    if (i === 6) {
+                        ctx.fillStyle = "orange";
+                        ctx.strokeStyle = "orange";
+                    }
+                    if (i === 7) {
+                        ctx.fillStyle = "magenta";
+                        ctx.strokeStyle = "magenta";
+                    }
+                    if (i === 8) {
+                        ctx.fillStyle = "DarkSlateGray";
+                        ctx.strokeStyle = "DarkSlateGray";
+                    }
+                    if (i === 9) {
+                        ctx.fillStyle = "SaddleBrown";
+                        ctx.strokeStyle = "SaddleBrown";
+                    }
+                    ctx.fillRect(res[i][j][0], res[i][j][1], 10, 10);
+                    ctx.beginPath();
+                    ctx.moveTo(res[i][j][0], res[i][j][1]);
+                    ctx.lineTo(centres[i][0], centres[i][1]);
+                    ctx.stroke();
                 }
-                centres[i][0] = sumX / x[i].length;
-                centres[i][1] = sumY / x[i].length;
-            }
-            res = x;
-            for (let u = 0; u < numOfClust; u++) {
-                if (res[u].length === 0) {
-                    centres[u][0] = randomNormal(mean, disp)[0];
-                    centres[u][1] = randomNormal(mean, disp)[1];
-                    z--;
-                }
-            }
-
-        }
-        clearDr();
-        for (let i = 0; i < res.length; i++) {
-            for (let j = 0; j < res[i].length; j++) {
-                if (i === 0) {
-                    ctx.fillStyle = "aqua";
-                    ctx.strokeStyle = "aqua";
-                }
-                if (i === 1) {
-                    ctx.fillStyle = "red";
-                    ctx.strokeStyle = "red";
-                }
-                if (i === 2) {
-                    ctx.fillStyle = "green";
-                    ctx.strokeStyle = "green";
-                }
-                if (i === 3) {
-                    ctx.fillStyle = "yellow";
-                    ctx.strokeStyle = "yellow";
-                }
-                if (i === 4) {
-                    ctx.fillStyle = "white";
-                    ctx.strokeStyle = "white";
-                }
-                if (i === 5) {
-                    ctx.fillStyle = "black";
-                    ctx.strokeStyle = "black";
-                }
-                if (i === 6) {
-                    ctx.fillStyle = "orange";
-                    ctx.strokeStyle = "orange";
-                }
-                if (i === 7) {
-                    ctx.fillStyle = "magenta";
-                    ctx.strokeStyle = "magenta";
-                }
-                if (i === 8) {
-                    ctx.fillStyle = "DarkSlateGray";
-                    ctx.strokeStyle = "DarkSlateGray";
-                }
-                if (i === 9) {
-                    ctx.fillStyle = "SaddleBrown";
-                    ctx.strokeStyle = "SaddleBrown";
-                }
-                ctx.fillRect(res[i][j][0], res[i][j][1], 10, 10);
-                ctx.beginPath();
-                ctx.moveTo(res[i][j][0], res[i][j][1]);
-                ctx.lineTo(centres[i][0], centres[i][1]);
-                ctx.stroke();
             }
         }
     }
 }
 
-const c = new DCanvas(document.getElementById("canv"));
+const d = new DCanvas(document.getElementById("canvas"));
+function updateStats() {
+    d.clear();
+}

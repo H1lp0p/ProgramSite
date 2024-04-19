@@ -115,7 +115,6 @@ function Tree(csvText){
 
     this.TrainTree = async function (nowData, nowNode = "root", nowHeight = 0){
         let startEntropy = this.entropy(nowData, targetKey);
-        //console.log(nowData);
         if (startEntropy <= minEntropy || nowHeight >= maxHeight){
             tree[nowNode] = {
                 question : "none",
@@ -132,7 +131,6 @@ function Tree(csvText){
             let skip = false;
             for (let key of ignoreKeys){
                 if (key === atribute){
-                    //console.log(`${atribute} skipped for ${nowNode}.`);
                     skip = true;
                     break;
                 }
@@ -203,7 +201,6 @@ function Tree(csvText){
     }
 
     this.calcQuest = function (value, border, borderValue){
-        //console.log(border, value, borderValue, borderFunc[border](value, borderValue));
         return borderFunc[border](value, borderValue);
     }
 

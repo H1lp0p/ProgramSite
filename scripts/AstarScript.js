@@ -46,7 +46,6 @@ function genLab(){
         return (pos[0] >= 0 && pos[0]<dimensions) && (pos[1] >= 0 && pos[1]<dimensions) && !visited[pos[0]][pos[1]];
     }
 
-    let hallDimension = Math.floor(dimensions/2) + 1;
     let newPlane = genPlane();
     let startPos = [0,0];
     let queue = [];
@@ -81,8 +80,6 @@ function genLab(){
       let posibleMoves = avalibleMove.map(x => [x[0] + nowPos[0], x[1] + nowPos[1]]);
       posibleMoves = posibleMoves.filter(check);
 
-      //console.log(nowPos, posibleMoves);
-
       if (posibleMoves.length > 0){
           let randInd = Math.floor(Math.random()*posibleMoves.length);
 
@@ -111,7 +108,6 @@ function genLab(){
 
 function showPlane(plane){
     d.drawGrid();
-    //console.log(plane);
     for (let y = 0; y<dimensions;y++){
         for(let x = 0; x<dimensions; x++){
             pixel(y,x, emptyPixel);
@@ -142,23 +138,24 @@ let avalibleMoves = [{y : 0, x : 1}, {y : 0, x : -1},
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-async function Astar(startY, startX, endY, endX){
+async function Astar(startY, startX, endY, endX) {
 
-    function distance(nowPos, endPos){
+    function distance(nowPos, endPos) {
         return Math.abs(nowPos[0] - endPos[0]) + Math.abs(nowPos[1] - endPos[1]);
         //return Math.sqrt((nowPos[0] - endPos[0]) ** 2 + (nowPos[1] - endPos[1]) ** 2);
     }
-    function choose(queue, endY, endX){
+
+    function choose(queue, endY, endX) {
         let best = queue[0];
-        for (let el of queue){
-            if (distance(best, [endY, endX]) >= distance(el, [endY, endX])){
+        for (let el of queue) {
+            if (distance(best, [endY, endX]) >= distance(el, [endY, endX])) {
                 best = el;
             }
         }
         return best;
     }
 
-    function isCorrect(position){
+    function isCorrect(position) {
         return (position[0] >= 0 && position[0] < dimensions &&
             position[1] >= 0 && position[1] < dimensions &&
             plane[position[0]][position[1]] !== -1);
@@ -168,9 +165,9 @@ async function Astar(startY, startX, endY, endX){
     let queue = [];
     let visited = [];
 
-    for (let y = 0; y<dimensions; y++){
+    for (let y = 0; y < dimensions; y++) {
         let line = [];
-        for (let x = 0; x<dimensions; x++){
+        for (let x = 0; x < dimensions; x++) {
             line.push([-1, -1, dimensions * dimensions + 100, false]);
         }
         visited.push(line);
@@ -178,33 +175,30 @@ async function Astar(startY, startX, endY, endX){
 
     queue.push([startY, startX]);
     visited[startY][startX] = [0, 0, 0, true];
-    let wave = 0;
-    while(queue.length > 0){
+    while (queue.length > 0) {
         let nowPos = choose(queue, endY, endX);
-        queue.splice(queue.indexOf(nowPos),1);
+        queue.splice(queue.indexOf(nowPos), 1);
         visited[nowPos[0]][nowPos[1]][3] = true;
 
-        //pixel(nowPos[0], nowPos[1], emptyPixel);
-
         let moves = avalibleMoves.map(move =>
-        [move.y + nowPos[0], move.x + nowPos[1]]);
+            [move.y + nowPos[0], move.x + nowPos[1]]);
 
         moves = moves.filter(isCorrect);
-        for (let nowMove of moves){
-            if (!visited[nowMove[0]][nowMove[1]][3]){
+        for (let nowMove of moves) {
+            if (!visited[nowMove[0]][nowMove[1]][3]) {
                 queue.push(nowMove);
                 visited[nowMove[0]][nowMove[1]][3] = true;
                 pixel(nowMove[0], nowMove[1], workPattern);
                 await sleep(delay);
             }
-            if (visited[nowMove[0]][nowMove[1]][2] > visited[nowPos[0]][nowPos[1]][2] + 1){
+            if (visited[nowMove[0]][nowMove[1]][2] > visited[nowPos[0]][nowPos[1]][2] + 1) {
                 visited[nowMove[0]][nowMove[1]] = [nowPos[0], nowPos[1], visited[nowPos[0]][nowPos[1]][2] + 1, visited[nowMove[0]][nowMove[1]][3]];
             }
         }
 
-        if (nowPos[0] === endY && nowPos[1] === endX){
+        if (nowPos[0] === endY && nowPos[1] === endX) {
             let wayBack = nowPos;
-            while (wayBack[0] !== startY || wayBack[1] !== startX){
+            while (wayBack[0] !== startY || wayBack[1] !== startX) {
                 res.unshift(wayBack);
                 wayBack = [visited[wayBack[0]][wayBack[1]][0], visited[wayBack[0]][wayBack[1]][1]];
             }
@@ -216,22 +210,6 @@ async function Astar(startY, startX, endY, endX){
     return res;
 
 }
-
-function drawSnake(way, nowHead, len){
-    let beginSnake = Math.max(0, nowHead - len);
-    let  endSnake = Math.min(way.length-1, nowHead);
-
-
-    let nowSnake = way.slice(Math.max(0, nowHead - len), Math.min(way.length-1, nowHead));
-    for (let nowRing of nowSnake){
-        pixel(nowRing[0], nowRing[1], snakePart);
-    }
-
-    if(nowHead <= way.length + len && nowHead >= - len){
-        setTimeout( () => {nowSnake( way, nowHead + 1, len)}, Math.max(0, nowHead) * 100);
-    }
-}
-
 function switchToWall(){
     nowState = wallPattern;
 }
@@ -274,7 +252,6 @@ async function path(){
             else{
                 for (let nowPix of way){
                     pixel(nowPix[0], nowPix[1], snakePart);
-                    console.log(nowPix);
                     await  sleep(delay);
                 }
                 begin = endPoints[nowEnd];
@@ -341,7 +318,7 @@ function wallController(y, x){
 }
 
 function emtpyPixelController(y, x){
-    if (plane[y, x] === tiles.end){
+    if (plane[y][x] === tiles.end){
         pointController(y,x);
     }
     else{
